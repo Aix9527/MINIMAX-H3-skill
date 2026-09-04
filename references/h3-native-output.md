@@ -1,20 +1,19 @@
 # H3 Native Output Contract
 
-This module preserves MiniMax H3's official prompt-writing shape. Director logic may enrich the content, but must not rename the fields or invent a competing schema.
+This module preserves MiniMax H3's official prompt-writing shape. Director logic may enrich content, but must not rename official fields or invent competing dialogue syntax.
 
 ## Public model baseline
 
-MiniMax H3 is an omni-modal video model that can understand text, images, video and audio, generate native stereo audio with video, and supports clips up to 15 seconds. Public MiniMax material lists output duration as 4–15 seconds; a specific local or custom workflow may impose a narrower range, which wins for that runtime.
+MiniMax H3 is an omni-modal video model that understands text, images, video and audio, generates native stereo audio with video, and publicly supports 4–15 second clips. A target runtime may impose narrower limits.
 
 Official upstream references:
 
 - https://github.com/MiniMax-AI/MiniMax-H3
 - https://github.com/MiniMax-AI/MiniMax-H3/tree/main/skills/h3-prompt-writing
-- https://www.minimax.io/news/minimax-h3-open-source
 
 ## Base modes
 
-Use for T2VA, I2VA, FL2VA and L2VA. Exact order:
+Use this exact order for T2VA, I2VA, FL2VA and L2VA:
 
 ```text
 integrated_multimodal_description: ...
@@ -24,40 +23,82 @@ overall_soundscape: ...
 non_diegetic_music: ...
 ```
 
-`integrated_multimodal_description` carries visual action, camera, dialogue, synchronous active sound events, shot timing and image-alignment instructions.
+`integrated_multimodal_description` carries visual action, camera, speakers, dialogue, synchronized diegetic events, shot timing and image alignment.
 
-`overall_soundscape` carries diegetic/nonverbal ambience, room tone, foley and action sounds. Do not repeat the dialogue or the audience-only score here.
+`overall_soundscape` carries ambience, room tone, foley and non-verbal physical sound. Do not repeat dialogue or audience-only score here.
 
-`non_diegetic_music` carries only audience-only score. If none is desired, state a clean no-score intent rather than inventing music.
+`non_diegetic_music` carries only audience-only score.
 
-### Shot timing
+## Shot timing
 
 - First shot: `[Shot 1] ...` with no timestamp.
 - Later editorial shots: `[Shot 2] At 00:04.000, ...`
-- Times are shot start times, strictly increasing, inside the target duration.
-- Do not create a new `[Shot N]` just to mark a phase inside a continuous take.
+- Times are strictly increasing shot start times inside the requested duration.
+- Do not create a new `[Shot N]` merely to mark an action phase inside one continuous take.
 
-### Dialogue
+## Canonical dialogue grammar — hard requirement
 
-Assign stable speaker labels `(S1)`, `(S2)` by first spoken appearance. Put spoken content inside:
+Assign stable vocal speaker IDs by spoken appearance: `(S1)`, `(S2)`, `(S3)`...
+
+**Speaker ID, identity, action and delivery MUST remain outside `<d>`.**
+
+Inside `<d>`, include **only** the language tag and exact spoken words.
+
+Correct:
 
 ```text
-<d>[Chinese] 原始台词</d>
+The young woman with a quiet Mandarin Chinese voice (S1) says: <d>[Chinese] 我下一站下车。</d>
 ```
 
-Preserve user-supplied dialogue, lyrics and requested visible text exactly unless the user asks for rewriting.
+Incorrect:
 
-### I2VA
+```text
+<d>[Chinese][S1] 我下一站下车。</d>
+```
 
-The picture is the target first frame. Begin from what is actually visible. Describe forward evolution; do not redescribe a conflicting initial composition.
+Incorrect:
 
-### FL2VA
+```text
+<d>[Chinese] (S1) 我下一站下车。</d>
+```
 
-The first picture is the first-frame target and the last picture is the last-frame target. The motion path must progressively close the visible difference and arrive at the last frame at the end, not teleport there in the final instant.
+Do not invent IDs such as `[S1]` inside the dialogue block or compound textual aliases such as `S1-VO` as dialogue markup. Reuse the same stable `(S1)` when the same person speaks visibly or in voiceover.
 
-### L2VA
+### Voiceover
 
-Infer a plausible opening and converge toward the provided last frame. Do not accidentally treat the last frame as a first-frame reference.
+Use the official wording `says in an off-screen voiceover` and immediately state that the corresponding on-screen lips remain closed.
+
+```text
+The woman (S1) says in an off-screen voiceover: <d>[Chinese] 我还记得那条路。</d> while her on-screen lips remain completely closed.
+```
+
+For an independent narrator, assign a separate stable ID such as `(S5)` and use the same voiceover grammar. State that all visible characters remain closed-lipped while the narrator speaks.
+
+### Language locking
+
+The language tag inside `<d>` controls the intended spoken language. Preserve source dialogue verbatim.
+
+When the project requires one spoken language throughout, add a compact project-level hard lock, for example:
+
+```text
+All audible human speech must be Mandarin Chinese. Never translate Chinese dialogue or narration into English. English descriptive prose is instruction-only and must never be spoken aloud.
+```
+
+Do **not** translate the executable scene description into Chinese merely to force Chinese speech. The official writing guide uses English rewrite prose while preserving dialogue, lyrics and exact visible scene text in their original language.
+
+For Mandarin projects, use `<d>[Chinese] ...</d>` on every audible dialogue, narration, inner-monologue or voiceover block. Do not leave narration as an untagged quoted sentence in descriptive prose.
+
+## I2VA
+
+The picture is the target first frame. Begin from what is actually visible and describe forward evolution without conflicting with the image.
+
+## FL2VA
+
+The first picture anchors the opening and the last picture anchors the ending. Describe the continuous motion path that progressively closes the visible difference.
+
+## L2VA
+
+Infer a plausible opening and converge toward the supplied last frame. Do not treat the final image as a first-frame reference.
 
 ## Ref2VA / full-reference mode
 
@@ -85,17 +126,13 @@ non_diegetic_music:
 
 Reference labels keep one meaning across every section.
 
-### Reference semantics
-
-- `<Subject N>` — persistent subject identity/concept as defined from source material.
-- `<Picture N>` — specific picture/keyframe/composition relation.
-- `<Video N>` — source video or temporal/camera/action relation.
+- `<Subject N>` — persistent identity/concept.
+- `<Picture N>` — picture/keyframe/composition relation.
+- `<Video N>` — video/edit/continuation/motion relation.
 - `<Audio N>` — explicit audio reuse/reference relation.
 
-Do not create an `<Audio N>` merely because an uploaded video happens to contain audio; define it only when the audio signal has an explicit role.
+`retention_analysis` must state what transfers, what changes, and what must not transfer.
 
-`retention_analysis` must say what is copied/referenced/changed and what must not transfer. Natural-language relationships are part of H3's control surface; make ownership unambiguous.
+## Language of rewrite prose
 
-## Language
-
-For workflows based on the official prompt-writing guide, write the rewrite sections in English while preserving dialogue, lyrics and exact visible scene text in their original language. If a user's target runtime is already proven to accept Chinese production prompts and they explicitly want Chinese, follow that runtime/user requirement without changing official field names.
+For workflows based on the official prompt-writing guide, write rewrite sections in English while preserving dialogue, lyrics and exact visible scene text in their original language. If a proven runtime explicitly requires Chinese production prose, follow that runtime without changing official field names or canonical dialogue grammar.
