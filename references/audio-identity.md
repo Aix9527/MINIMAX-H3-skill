@@ -2,7 +2,7 @@
 
 H3 generates audiovisual content jointly, so sound belongs on the timeline rather than being appended after the visual description.
 
-For visible dialogue, also read [Natural Dialogue Motion](dialogue-motion.md). Ordinary cinematic dialogue defaults to `SUBTLE_LIPSYNC`, not exaggerated visible articulation.
+For visible dialogue, also read [Natural Dialogue Motion](dialogue-motion.md). For wrong-speaker prevention and recurring-scene control, also read [Speaker Ownership & Scene Lock](speaker-scene-lock.md).
 
 ## Four semantic buses
 
@@ -48,6 +48,44 @@ Wrong:
 ```
 
 Preserve user-supplied dialogue exactly unless asked to rewrite. Reuse the same `(S1)` when the same person speaks again, including voiceover.
+
+## ACTIVE_SPEAKER hard lock
+
+Default each generated dialogue clip to exactly one dialogue owner.
+
+Compile near the start of the shot:
+
+```text
+ACTIVE_SPEAKER = YUYUE_17 (S1), screen-left, three-quarter view.
+Only YUYUE_17 (S1) may produce human dialogue audio in this clip.
+RIVAL_GIRL (S2) is MUTE_LISTENER: no speech, lips closed, no phoneme motion.
+YUYUE_17 (S1) says: <d>[Chinese] 中文台词。</d>
+```
+
+Rules:
+
+- Only `ACTIVE_SPEAKER` may generate human dialogue audio and visible speech articulation.
+- All other visible people are `MUTE_LISTENER` unless overlapping dialogue is explicitly required.
+- The voice's spatial origin remains tied to the active speaker's screen position.
+- A camera cut to another face never transfers dialogue ownership.
+- When the Speaker ID changes, prefer a new generation segment.
+- Do not put long dialogue from one character over another character's full frontal face by default.
+
+## Off-screen speech safety
+
+Off-screen speech is higher risk than visible single-speaker dialogue.
+
+Do **not** default to:
+
+`speaker A begins speaking → cut to listener B's full frontal face → A continues a long off-screen line`.
+
+If off-screen speech is unavoidable:
+
+- show back-of-head, shoulder, hands, or environment rather than another complete mouth-forward face;
+- explicitly compile `ALL VISIBLE MOUTHS = CLOSED_LIPS`;
+- state that the audio continues from the original speaker's direction;
+- keep the off-screen portion short;
+- if speaker correctness matters more than edit variety, split to a new clip and keep the original speaker visible/dominant.
 
 ## Spoken-language hard lock
 
@@ -119,11 +157,11 @@ Do not make speech occupy the full clip by default. Prefer:
 
 `reaction / inhale → speech → pause → mouth settles → reaction`
 
-If a line is too dense, split it, extend timing, cut to a listener reaction, or continue speech off-screen instead of increasing mouth speed.
+If a line is too dense, first split it across generation segments or add time. Do not solve dense speech by carrying a long off-screen line across another character's full visible face.
 
 ## Camera guidance for dialogue
 
-For ordinary dialogue, prefer medium close-up, three-quarter angle, natural eye level, or listener reaction coverage. Avoid a long frontal extreme close-up for dense speech unless story-critical.
+For ordinary dialogue, prefer medium close-up, three-quarter angle, natural eye level, or coverage that preserves the active speaker's ownership. Listener reactions are safest after the spoken line finishes or when the listener's mouth is not visibly available for reassignment.
 
 ## Audio references
 
@@ -137,6 +175,7 @@ Use only when the risk exists:
 - age/timbre drift;
 - multiple mouths sharing one line;
 - non-speaker lip-sync;
+- dialogue ownership transfer after a camera cut;
 - narration spoken by a visible character;
 - swallowed/rushed dialogue;
 - dialogue masked by music/SFX;
