@@ -32,78 +32,38 @@ jobs:
           fi
           echo "Public naming policy passed / 公开命名检查通过"
 
-  bootstrap-historical-releases:
-    name: Bootstrap v1/v2 Releases / 补建 v1/v2 发布
+  skill-contract-check:
+    name: Skill Contract Check / Skill 契约检查
     needs: public-naming-policy
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    env:
-      GH_TOKEN: ${{ github.token }}
     steps:
-      - name: Create v1.0.0 if missing / 缺失时创建 v1.0.0
+      - name: Checkout repository / 检出仓库
+        uses: actions/checkout@v4
+
+      - name: Validate required contracts / 校验必要契约
         shell: bash
         run: |
-          if gh release view v1.0.0 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            echo "v1.0.0 release already exists / v1.0.0 Release 已存在"
-          else
-            cat > /tmp/v1-notes.md <<'EOF'
-          ## 中文
-          MiniMax H3 Director OS V1.0 首个正式版本。建立了导演优先的 H3 提示词生成核心，包括 Blocking、表演、动作物理、摄影、灯光、声音、Reference Contract、连续性与 QC Repair。
-
-          该版本对应 V1.0 完整仓库状态。
-
-          ## English
-          MiniMax H3 Director OS V1.0 initial formal release. It established the director-first H3 prompt-generation core, including blocking, performance, action physics, camera, lighting, audio, Reference Contract, continuity, and QC repair.
-
-          This release points to the complete V1.0 repository state.
-          EOF
-            gh release create v1.0.0 \
-              --repo "$GITHUB_REPOSITORY" \
-              --target 5eee1a5466345b82745da06364c1e2203f8a82fc \
-              --title "MiniMax H3 Director OS V1.0 / 导演系统 V1.0" \
-              --notes-file /tmp/v1-notes.md
+          VERSION="$(awk '/^version:/ {gsub(/"/, "", $2); print $2; exit}' SKILL.md)"
+          if [ -z "$VERSION" ]; then
+            echo "Missing SKILL.md version / SKILL.md 缺少版本号"
+            exit 1
           fi
 
-      - name: Create v2.0.0 if missing / 缺失时创建 v2.0.0
-        shell: bash
-        run: |
-          if gh release view v2.0.0 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            echo "v2.0.0 release already exists / v2.0.0 Release 已存在"
-          else
-            cat > /tmp/v2-notes.md <<'EOF'
-          ## 中文
-          MiniMax H3 Director OS V2.0 生产级重构版本。
+          grep -q 'SUBTLE_LIPSYNC' SKILL.md
+          grep -q 'SUBTLE_LIPSYNC' references/audio-identity.md
+          grep -q 'SUBTLE_LIPSYNC' references/dialogue-motion.md
+          grep -q 'CLOSED_LIPS' references/audio-identity.md
+          grep -q 'CLOSED_LIPS' references/dialogue-motion.md
+          grep -q "v${VERSION}" README.md
 
-          主要升级：
-          - 以 MiniMax H3 原生 Prompt 契约作为硬底座；
-          - 引入 Prompt Budget Engine，分离项目级常量、镜头级变量和交接状态；
-          - 恢复并模块化数字真人、角色身份锁、微表演、战斗/VFX、环境损伤与语音身份；
-          - 强化 Reference Authority、首帧空间审计与 Accepted Footage 连续性；
-          - 加入自适应时间节拍、按需 Negative、QC/Retake 修复阶梯；
-          - 保留 schemaVersion 4 director.json 工作流兼容。
+          echo "Skill contract passed for v${VERSION} / v${VERSION} Skill 契约检查通过"
 
-          ## English
-          MiniMax H3 Director OS V2.0 production-grade rebuild.
-
-          Major upgrades:
-          - Uses the MiniMax H3 native prompt contract as the hard floor;
-          - Adds the Prompt Budget Engine to separate project invariants, shot variables, and handoff state;
-          - Restores and modularizes digital-human realism, identity locks, micro-performance, combat/VFX, environment damage, and audio identity;
-          - Strengthens Reference Authority, first-frame spatial audit, and Accepted Footage continuity;
-          - Adds adaptive time beats, targeted negatives, and a QC/retake repair ladder;
-          - Preserves compatibility with the schemaVersion 4 director.json workflow.
-          EOF
-            gh release create v2.0.0 \
-              --repo "$GITHUB_REPOSITORY" \
-              --target "$GITHUB_SHA" \
-              --title "MiniMax H3 Director OS V2.0 / 导演系统 V2.0" \
-              --notes-file /tmp/v2-notes.md
-          fi
-
-  refresh-v2-public-snapshot:
-    name: Refresh V2 Public Snapshot / 同步 V2 公开快照
-    needs: public-naming-policy
-    if: github.ref == 'refs/heads/main' && github.event.head_commit.message == 'ci naming refresh'
+  sync-current-version:
+    name: Sync Current Version / 同步当前版本
+    needs:
+      - public-naming-policy
+      - skill-contract-check
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
@@ -113,46 +73,68 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Point v2.0.0 to sanitized V2 snapshot / 更新 V2.0.0 公开快照
+      - name: Create version tag and release if missing / 缺失时创建版本标签与发布
         shell: bash
         run: |
+          VERSION="$(awk '/^version:/ {gsub(/"/, "", $2); print $2; exit}' SKILL.md)"
+          TAG="v${VERSION}"
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git tag -f v2.0.0 "$GITHUB_SHA"
-          git push --force origin refs/tags/v2.0.0
 
-          RELEASE_ID="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/v2.0.0" --jq '.id')"
-          gh api --method PATCH "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID" \
-            -f target_commitish="$GITHUB_SHA" >/dev/null
+          if git ls-remote --exit-code --tags origin "refs/tags/${TAG}" >/dev/null 2>&1; then
+            echo "${TAG} already exists / ${TAG} 已存在"
+          else
+            git tag "${TAG}" "${GITHUB_SHA}"
+            git push origin "refs/tags/${TAG}"
+            echo "Created ${TAG} / 已创建 ${TAG}"
+          fi
 
-          echo "v2.0.0 now points to the sanitized public V2 snapshot."
-          echo "v2.0.0 已同步到清理后的 V2 公开快照。"
+          if gh release view "${TAG}" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "${TAG} Release already exists / ${TAG} Release 已存在"
+            exit 0
+          fi
 
-  release-from-version-tag:
-    name: Release Tag / 发布版本标签
-    needs: public-naming-policy
+          python3 - "$VERSION" <<'PY' > /tmp/release-notes.md
+          import re
+          import sys
+          from pathlib import Path
+
+          version = sys.argv[1]
+          text = Path('CHANGELOG.md').read_text(encoding='utf-8')
+          pattern = rf'^## {re.escape(version)}[^\n]*\n(.*?)(?=^## |\Z)'
+          match = re.search(pattern, text, flags=re.M | re.S)
+          if match:
+              print(f'## 版本 {version} / Version {version}\n')
+              print(match.group(1).strip())
+          else:
+              print(f'## 中文\n此 Release 对应版本 {version}。详细变化请查看 CHANGELOG.md。\n')
+              print(f'## English\nThis Release corresponds to version {version}. See CHANGELOG.md for details.')
+          PY
+
+          gh release create "${TAG}" \
+            --repo "$GITHUB_REPOSITORY" \
+            --verify-tag \
+            --title "MiniMax H3 Director OS V${VERSION} / 导演系统 V${VERSION}" \
+            --notes-file /tmp/release-notes.md
+
+  verify-tag-release:
+    name: Verify Tagged Release / 校验标签版本发布
+    needs:
+      - public-naming-policy
+      - skill-contract-check
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - name: Create Release if missing / 缺失时创建 Release
+      - name: Ensure release exists / 确保 Release 存在
         shell: bash
         run: |
           TAG="$GITHUB_REF_NAME"
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            echo "$TAG release already exists / $TAG Release 已存在"
-            exit 0
+            echo "$TAG Release exists / $TAG Release 已存在"
+          else
+            echo "$TAG Release has not been created yet; main-branch sync will create it."
+            echo "$TAG Release 尚未创建；main 分支同步任务将负责创建。"
           fi
-          cat > /tmp/release-notes.md <<EOF
-          ## 中文
-          此 Release 对应版本标签 **$TAG**。版本变化请查看该版本中的 CHANGELOG.md 与仓库 README。
-
-          ## English
-          This Release corresponds to version tag **$TAG**. See CHANGELOG.md and the repository README at this version for the detailed changes.
-          EOF
-          gh release create "$TAG" \
-            --repo "$GITHUB_REPOSITORY" \
-            --verify-tag \
-            --title "$TAG / 版本 $TAG" \
-            --notes-file /tmp/release-notes.md
