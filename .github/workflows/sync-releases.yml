@@ -103,7 +103,7 @@ jobs:
   refresh-v2-public-snapshot:
     name: Refresh V2 Public Snapshot / 同步 V2 公开快照
     needs: public-naming-policy
-    if: github.ref == 'refs/heads/main' && github.event.head_commit.message == 'docs: sanitize public naming'
+    if: github.ref == 'refs/heads/main' && github.event.head_commit.message == 'ci naming refresh'
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
