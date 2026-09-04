@@ -1,35 +1,86 @@
 # MINIMAX-H3-skill
 
-**MiniMax H3 Director OS V1.0** 是一套面向 MiniMax H3 的导演级视频提示词 Skill。它不是简单的“提示词润色器”，而是把创意、小说、剧本、分镜、参考图/视频/音频或上一段生成结果，编译成可执行、可连续、可质检的 H3 导演指令。
+**MiniMax H3 Director OS V2.0** is a production-grade prompt-generation skill for MiniMax H3. It combines the model-native prompt contract with cinematic directing, digital-human realism, physical performance, combat/VFX, audio identity, reference authority, long-video continuity and QC—without copying a giant production bible into every shot.
 
-## 核心能力
+## V2.0 design goal
 
-- 导演决策：先确定叙事任务、blocking、表演和动作，再决定镜头。
-- 表演与动作：把抽象情绪翻译为可见身体行为，并约束动作物理因果与终点。
-- 摄影与灯光：景别、机位、焦段、主运镜、光源方向都必须服务叙事。
-- 声音导演：对白、呼吸、环境声、动作声与非画内音乐进入同一时间系统。
-- Reference Contract：明确 Subject / Picture / Video / Audio 各参考素材职责，减少互相覆盖。
-- 长视频连续性：使用 Continuity State 继承身份、服装、道具、轴线、动作阶段、灯光、音频和真实尾帧状态。
-- H3 原生编译：覆盖 T2VA、I2VA、FL2VA、L2VA、Full Reference、Video Edit、Video Continuation、Multi-Segment。
-- QC 与失败修复：优先删冲突、减动作、锁身份/空间、明确终点，再考虑拆段或重建参考锚点。
+> More control than V10.2, less duplicated prompt text than V10.2, and stricter MiniMax H3-native formatting than V1.0.
 
-## 使用
-
-将仓库根目录的 [`SKILL.md`](./SKILL.md) 作为 Agent/Skill 指令加载。然后直接输入自然语言需求，例如：
+## Architecture
 
 ```text
-把这一段小说转换成 3 段连续的 MiniMax H3 视频提示词，每段 10 秒。
-人物参考使用 Subject 1，上一段真实尾帧作为下一段起始状态，保留对白与环境声。
+SKILL.md                         # router + director brain + prompt-budget compiler
+references/
+  h3-native-output.md            # official H3 field/mode contract
+  cinematic-production.md        # digital human, character lock, micro-performance, camera/light
+  performance-action-vfx.md      # body physics, combat, impact, VFX, environment damage
+  audio-identity.md              # dialogue/voice/narrator/mix contracts
+  reference-continuity.md        # reference authority, first-frame audit, accepted-footage canon
+  qc-repair.md                   # validation, take review and repair ladder
+  director-json-v4.md            # optional V9/V10.2-compatible director.json container
+docs/
+  SOURCE_COMPARISON.md           # source-by-source strengths, weaknesses and merge rationale
+CHANGELOG.md
 ```
 
-也可以用于单镜头、首帧图生视频、首尾帧、全参考、续写和失败 Prompt 修复。
+## What changed from V1.0
 
-## 设计原则
+V1.0 had a stronger H3 director brain but could produce prompts that were too thin compared with V10.2. V2.0 restores the high-value production controls—digital-human layers, identity locks, micro-performance, combat/VFX, environment damage, voice identity and adaptive timing—while routing them only when needed.
 
-> Director Brain → Blocking → Performance → Physics → Camera → Lighting → Audio → Continuity → Reference Contract → H3 Compiler → QC Repair
+The key mechanism is the **Prompt Budget Engine**:
 
-重点不是堆叠“电影感、史诗、8K”等形容词，而是让每一句指令都能回答：**摄像机真的能拍到，或者麦克风真的能听到吗？**
+1. **Project invariants** — world/style, canonical identity, voice, persistent state.
+2. **Shot variables** — current action, camera, VFX, dialogue, sound and endpoint.
+3. **Handoff state** — accepted end state, unfinished motion, damage and continuity facts.
 
-## Version
+This prevents the old pattern where a 6–10k-character global bible was pasted into every shot.
 
-- V1.0 — MiniMax H3 Director OS / Cinematic Sequence Director
+## Supported tasks
+
+- T2VA text-to-audio-video
+- I2VA first-frame image-to-audio-video
+- FL2VA first/last-frame generation
+- L2VA last-frame-constrained generation
+- Ref2VA full multimodal reference / edit / continuation
+- dialogue and narration scenes
+- digital-human / guoman-realism scenes
+- action, combat, spell and VFX scenes
+- multi-segment long-form video
+- prompt diagnosis / repair
+- the established `schemaVersion: 4` `.director.json` workflow
+
+## Official H3 baseline
+
+MiniMax's public H3 materials describe an omni-modal model accepting text/image/video/audio context, producing video with native stereo audio, up to 15 seconds and up to 2K. The official prompt-writing skill uses T2VA/I2VA/FL2VA/L2VA/Ref2VA and preserves fixed prompt section order.
+
+Official sources:
+
+- https://github.com/MiniMax-AI/MiniMax-H3
+- https://github.com/MiniMax-AI/MiniMax-H3/tree/main/skills/h3-prompt-writing
+- https://www.minimax.io/news/minimax-h3-open-source
+
+Target runtimes can impose narrower limits. Existing project/runtime settings always win over generic defaults.
+
+## Usage
+
+Load the repository root [`SKILL.md`](./SKILL.md), then ask naturally, for example:
+
+```text
+把这段小说改成 5 个 MiniMax H3 生成段。人物用参考图锁定，战斗段保留物理接触和环境损伤，输出可直接复制的 H3 提示词。
+```
+
+or:
+
+```text
+根据上一段真实尾帧继续 8 秒，不重复上一段已经完成的转身动作；保持角色身份、衣服、屏幕方向和光线，最后停在可继续生成的稳定画面。
+```
+
+or:
+
+```text
+按我的 V10.2 schemaVersion 4 格式输出 director.json。
+```
+
+## Source review
+
+The design was rebuilt after comparing the uploaded H3 prompt skills, director-craft frameworks, the 98-skill film craft library, Seedance 2.0 sequence system, ComfyUI-H3-Director, Thedore V9, Thedore V10.2 and V1.0. See [`docs/SOURCE_COMPARISON.md`](./docs/SOURCE_COMPARISON.md).
