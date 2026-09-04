@@ -8,7 +8,7 @@ No single source was sufficient.
 
 - The official-style H3 skills are strongest at **correct model-native structure**, but are intentionally light on film directing.
 - Director craft libraries are strongest at **cinematic intent, blocking, performance, camera and sound**, but are platform-neutral.
-- V9/V10.2 are strongest at **production state, digital humans, combat/VFX, validation and custom director JSON**, but V10.2 can over-repeat project-wide material inside every shot.
+- V9/V10.2 production frameworks are strongest at **production state, digital humans, combat/VFX, validation and custom director JSON**, but V10.2 can over-repeat project-wide material inside every shot.
 - Seedance 2.0 is strongest at **accepted-footage continuity, reference authority and long-sequence state**, but its surface-specific mechanics must not be copied into H3.
 - ComfyUI-H3-Director is strongest at **practical multi-segment execution, tail-frame relay, caching, audio slots and global prompt separation**, but it is a runtime/plugin rather than a general director brain.
 
@@ -27,8 +27,8 @@ V2.0 therefore uses: `H3 official contract + director brain + production modules
 | `director-skills-main/travel-skill` | Excellent first-frame spatial audit, physical camera path, motivated lighting, real/AI material discipline | Travel-domain framing; model recipes are not H3-specific | First-frame spatial truth and “do not invent inaccessible geometry” |
 | `seedance-2.0` | Reference authority by dimension, accepted observed state, continuation/re-anchor logic, anti-slop, sequence state, camera endpoint | Seedance surface/model limits are not H3 rules; very large routed skill graph | Authority matrix, accepted-footage canon, chain re-anchor heuristic, anti-slop |
 | `ComfyUI-H3-Director` | Real H3 production workflow: 5–15s timeline UI, global prompt, tail-frame relay, reference conversion, segment caching/re-run, audio slots | Runtime-specific; plugin behavior must not be presented as universal H3 semantics | Global-vs-shot separation, segment-level execution mindset, runtime adapter boundary |
-| Thedore V9 | Clean Director IR, model adapters, physical performance, reference registry, audio/narrator separation, accepted footage > plan | Cinematic language/digital-human/action detail still relatively thin | Director/adapter separation and canonical observed-state loop |
-| Thedore V10.2 | Digital Human Realism, Character Visual Lock, Timecoded Beats, Micro Performance, combat impact, VFX contract, environment damage, QC/validators | Per-shot output can become excessively long by repeating global visual/identity/negative blocks; multi-model breadth adds complexity | All high-value production modules, but routed/condensed rather than copied wholesale |
+| Director Framework V9 | Clean Director IR, model adapters, physical performance, reference registry, audio/narrator separation, accepted footage > plan | Cinematic language/digital-human/action detail still relatively thin | Director/adapter separation and canonical observed-state loop |
+| Production Framework V10.2 | Digital Human Realism, Character Visual Lock, Timecoded Beats, Micro Performance, combat impact, VFX contract, environment damage, QC/validators | Per-shot output can become excessively long by repeating global visual/identity/negative blocks; multi-model breadth adds complexity | All high-value production modules, but routed/condensed rather than copied wholesale |
 | MiniMax H3 Director OS V1.0 | H3-focused director brain, Blocking-before-Camera, Reference Contract, spatial audit, anti-slop, H3 compiler | Under-specified production output in practice: digital-human/voice/combat/timing modules were not always re-injected; no modular reference files | Core director logic, upgraded with modular production layers and prompt budget |
 
 ## Key design corrections from V1.0
@@ -56,6 +56,10 @@ The V10.2 action stack survives as a specialized module, with physical contact r
 ### 6. Make reference ownership explicit
 
 Reference authority is defined per controlled dimension; media type and upload order do not decide authority. This combines H3's reference labels with the stronger state/authority logic found in the long-sequence skills.
+
+## Public naming policy
+
+Public documentation uses capability names, Skill names, framework categories, and version labels. Unrelated personal names, author names, or external project-brand names are intentionally omitted from public-facing comparison text, examples, and release notes.
 
 ## Resulting V2.0 architecture
 

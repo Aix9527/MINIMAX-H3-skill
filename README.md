@@ -8,21 +8,21 @@
 
 ## V2.0 设计目标 / V2.0 Design Goal
 
-> 比 V10.2 提供更多可控能力，同时减少 V10.2 式重复提示词，并比 V1.0 更严格地遵守 MiniMax H3 原生格式。
+> 比上一代 V10.2 生产框架提供更多可控能力，同时减少重复提示词，并比 V1.0 更严格地遵守 MiniMax H3 原生格式。
 >
-> More control than V10.2, less duplicated prompt text than V10.2, and stricter MiniMax H3-native formatting than V1.0.
+> More control than the prior V10.2 production framework, less duplicated prompt text, and stricter MiniMax H3-native formatting than V1.0.
 
 ## 核心原则 / Core Principles
 
-- **先导演，后编译。** 先确定叙事任务、Blocking、表演、物理因果、摄影机意图、灯光、声音与结束状态，再编译成 H3 提示词。
+- **先导演，后编译。** 先确定叙事任务、Blocking、表演、物理因果、摄影机意图、灯光、声音与结束状态，再编译成 H3 提示词。  
   **Direct first, compile second.** Decide narrative job, blocking, performance, physical causality, camera intent, lighting, sound, and endpoint before compiling H3 prompts.
-- **真实成片优先于计划。** 上一段已接受成片的真实尾帧和真实结束状态优先于旧计划。
+- **真实成片优先于计划。** 上一段已接受成片的真实尾帧和真实结束状态优先于旧计划。  
   **Accepted footage beats planned footage.** The real ending of accepted prior footage overrides what the old plan expected.
-- **Blocking before Camera。** 先安排人物在空间里怎么动，再决定镜头怎么动。
+- **Blocking before Camera。** 先安排人物在空间里怎么动，再决定镜头怎么动。  
   **Blocking before Camera.** Place and move subjects in space before choosing camera movement.
-- **Prompt Budget Engine。** 全局常量、当前镜头变量、交接状态分层管理，不把所有信息重复写进每镜。
+- **Prompt Budget Engine。** 全局常量、当前镜头变量、交接状态分层管理，不把所有信息重复写进每镜。  
   **Prompt Budget Engine.** Separate project invariants, shot variables, and handoff state instead of repeating everything in every shot.
-- **Negative 按需启用。** 只写本镜真实存在的风险。
+- **Negative 按需启用。** 只写本镜真实存在的风险。  
   **Targeted negatives only.** Add only the failure risks actually activated by the current shot.
 
 ## 架构 / Architecture
@@ -44,9 +44,9 @@ CHANGELOG.md                     # 版本更新记录 / version changelog
 
 ## 从 V1.0 到 V2.0 的变化 / What Changed from V1.0
 
-V1.0 的 H3 导演大脑更聚焦，但实际输出有时过于精简。V2.0 恢复了 V10.2 中最有价值的生产控制能力：数字真人、角色身份锁、微表演、战斗/VFX、环境损伤、语音身份和自适应时间节拍，同时把这些能力改成按需加载，而不是每镜完整重复。
+V1.0 的 H3 导演大脑更聚焦，但实际输出有时过于精简。V2.0 恢复了 V10.2 生产框架中最有价值的生产控制能力：数字真人、角色身份锁、微表演、战斗/VFX、环境损伤、语音身份和自适应时间节拍，同时把这些能力改成按需加载，而不是每镜完整重复。
 
-V1.0 had a stronger H3-focused director brain, but practical outputs could become too thin. V2.0 restores the most valuable V10.2 production controls—digital-human realism, character identity locks, micro-performance, combat/VFX, environment damage, voice identity, and adaptive timing—while routing them only when needed instead of repeating them wholesale in every shot.
+V1.0 had a stronger H3-focused director brain, but practical outputs could become too thin. V2.0 restores the most valuable controls from the V10.2 production framework—digital-human realism, character identity locks, micro-performance, combat/VFX, environment damage, voice identity, and adaptive timing—while routing them only when needed instead of repeating them wholesale in every shot.
 
 ### Prompt Budget Engine / 提示词预算引擎
 
@@ -120,9 +120,15 @@ Output director.json using my V10.2 schemaVersion 4 format.
 
 ## 来源对比 / Source Review
 
-V2.0 是在对比多套 H3 Prompt Skill、导演框架、98 个电影微 Skill、Seedance 2.0、ComfyUI-H3-提示词、等skill重构的。完整优缺点与融合依据见 [`docs/SOURCE_COMPARISON.md`](./docs/SOURCE_COMPARISON.md)。
+V2.0 是在对比多套 H3 Prompt Skill、导演框架、98 个电影微 Skill、Seedance 2.0、ComfyUI-H3-Director、V9/V10.2 生产框架与 V1.0 后重构的。完整优缺点与融合依据见 [`docs/SOURCE_COMPARISON.md`](./docs/SOURCE_COMPARISON.md)。
 
-V2.0 was rebuilt by comparing multiple sets of H3 Prompt Skills, director frameworks, 98 micro movie skills, Seedance 2.0, ComfyUI-H3 prompts, and other skills. You can see the full pros and cons and the basis for the integration at [`docs/SOURCE_COMPARISON.md`](./docs/SOURCE_COMPARISON.md) for the full strengths/weaknesses review and merge rationale.
+V2.0 was rebuilt after comparing multiple H3 prompt Skills, director frameworks, the 98-skill film craft library, Seedance 2.0, ComfyUI-H3-Director, the V9/V10.2 production frameworks, and V1.0. See [`docs/SOURCE_COMPARISON.md`](./docs/SOURCE_COMPARISON.md) for the full strengths/weaknesses review and merge rationale.
+
+## 公开命名规范 / Public Naming Policy
+
+对外文档仅使用功能名、Skill 名、框架类型与版本号描述来源和演进；与本仓库无关的个人名、作者名或外部项目品牌名不进入公开说明、Release Notes 或示例文本。
+
+Public-facing documentation uses capability names, Skill names, framework types, and version labels to describe sources and evolution. Unrelated personal names, author names, or external project-brand names are omitted from public documentation, release notes, and examples.
 
 ## 版本发布 / Releases
 
