@@ -54,7 +54,22 @@ jobs:
           grep -q 'SUBTLE_LIPSYNC' references/dialogue-motion.md
           grep -q 'CLOSED_LIPS' references/audio-identity.md
           grep -q 'CLOSED_LIPS' references/dialogue-motion.md
+          grep -q 'ACTIVE_SPEAKER' SKILL.md
+          grep -q 'ACTIVE_SPEAKER' references/audio-identity.md
+          grep -q 'ACTIVE_SPEAKER' references/speaker-scene-lock.md
+          grep -q 'MUTE_LISTENER' SKILL.md
+          grep -q 'MUTE_LISTENER' references/speaker-scene-lock.md
+          grep -q 'SCENE_ID' SKILL.md
+          grep -q 'SCENE_LOCK' SKILL.md
+          grep -q 'SCENE_LOCK' references/speaker-scene-lock.md
+          grep -q 'CANONICAL_SCENE_ANCHOR' references/speaker-scene-lock.md
+          grep -q 'Speaker ID belongs \*\*outside\*\* `<d>`' references/audio-identity.md
           grep -q "v${VERSION}" README.md
+
+          if grep -Eq '<d>\[[^]]+\]\[S[0-9]' SKILL.md references/*.md; then
+            echo "Invalid speaker ID found inside <d> / 检测到 Speaker ID 被写入 <d>"
+            exit 1
+          fi
 
           echo "Skill contract passed for v${VERSION} / v${VERSION} Skill 契约检查通过"
 
