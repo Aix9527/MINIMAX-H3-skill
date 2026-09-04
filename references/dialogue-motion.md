@@ -4,9 +4,9 @@
 
 该模块用于解决生成视频中人物说话时嘴唇和下颌动作过大的问题。普通影视对白默认使用 `SUBTLE_LIPSYNC`，声音清晰度与嘴部动作幅度必须分开控制。
 
-### H3 对白语法硬规则
+如需防止人物串台词，同时读取 [Speaker Ownership & Scene Lock](speaker-scene-lock.md)。
 
-口型控制不能破坏 H3 原生对白语法。
+### H3 对白语法硬规则
 
 正确：
 
@@ -49,7 +49,7 @@
 
 对白不应默认占满整个生成段。优先保留：
 
-`反应/吸气 → 说话 → 短暂停顿 → 嘴部回落 → 听者或说话者反应`
+`反应/吸气 → 说话 → 短暂停顿 → 嘴部回落 → 说话者或听者反应`
 
 8 秒镜头可参考：
 
@@ -57,7 +57,23 @@
 - `1.0–6.2s` 对白；
 - `6.2–8.0s` 嘴部回落、呼吸、反应。
 
-台词过长时，优先拆句、延长镜头、切听者反应或让声音离屏继续，而不是强迫角色高速连续动嘴。
+台词过长时，优先级改为：
+
+1. 拆成多个生成段；
+2. 延长可用对白时长；
+3. 保持原说话者作为主要可见人物；
+4. 只有确实需要时才使用短离屏对白。
+
+不要再默认使用“人物 A 说到一半 → 切人物 B 完整正脸 → A 离屏继续长时间说话”。这会增加台词被人物 B 接管的风险。
+
+### 听者反应安全规则
+
+需要听者反应时：
+
+- 最稳：等说话者台词结束后再切完整听者正脸；
+- 对白仍在继续时，优先展示听者背影、后脑、肩部、手部或环境；
+- 如果必须显示听者脸，避免嘴部成为清晰视觉焦点，并明确 `MUTE_LISTENER / CLOSED_LIPS / no speech / no phoneme motion`；
+- 对白所有权改变时优先切成新的生成段。
 
 ### 旁白与内心独白
 
@@ -71,13 +87,19 @@ The woman (S1) says in an off-screen voiceover: <d>[Chinese] 中文内心独白�
 
 ### 摄影建议
 
-普通对白优先中近景、三分之四侧角或自然视平线。除非剧情需要，不要让嘴成为画面中心，不要在长对白中持续正脸大特写。声音连续时可以切到听者反应，降低连续可见口型负担。
+普通对白优先中近景、三分之四侧角或自然视平线。除非剧情需要，不要让嘴成为画面中心，不要在长对白中持续正脸大特写。
+
+对于多人对白，摄影首先服务“谁在说”而不是追求反打变化。高可靠性模式下，一段生成只让一个人物拥有对白，下一人物开口时再切下一段。
 
 ### 对白专用 Negative
 
 普通对白存在嘴部过度运动风险时可加入：
 
 `exaggerated lip movement, over-articulated speech, large repetitive mouth opening, excessive jaw pumping, chewing-like dialogue motion, continuous mouth motion during pauses`
+
+存在串台词风险时可加入：
+
+`wrong speaker, voice swap, dialogue ownership transfer, non-speaker lip-sync, multiple mouths sharing one line`
 
 中文项目存在语言漂移时可加入：
 
@@ -88,6 +110,8 @@ The woman (S1) says in an off-screen voiceover: <d>[Chinese] 中文内心独白�
 ## English
 
 This module addresses overly visible lip and jaw motion during generated dialogue. Ordinary cinematic dialogue defaults to `SUBTLE_LIPSYNC`. Audio intelligibility and visible mouth-motion amplitude must be controlled separately.
+
+For wrong-speaker prevention, also read [Speaker Ownership & Scene Lock](speaker-scene-lock.md).
 
 ### Canonical H3 dialogue syntax
 
@@ -134,7 +158,11 @@ Prefer:
 
 `reaction / inhale → speech → short pause → mouth settles → reaction`
 
-If a line is too long, split it, extend the shot, cut to a listener reaction, or continue voice off-screen instead of forcing rapid continuous mouth motion.
+If a line is too long, prioritize splitting it across generation clips, adding time, and keeping the original speaker visually dominant. Do not default to carrying a long off-screen line across another character's full frontal face.
+
+### Safe listener reactions
+
+When speech is still active, prefer the listener's back-of-head, shoulder, hands, or environment inserts. A full listener face is safest after the active speaker finishes. If a listener face must remain visible during speech, explicitly declare `MUTE_LISTENER / CLOSED_LIPS / no speech / no phoneme motion` and keep the mouth away from the focal center.
 
 ### Voiceover
 
@@ -142,13 +170,17 @@ Reuse the same stable speaker ID for the same character and use the exact phrase
 
 ### Camera guidance
 
-Prefer medium close-ups, three-quarter angles, or natural eye-level framing. Do not make the mouth the persistent visual focal point unless story-critical.
+Prefer medium close-ups, three-quarter angles, or natural eye-level framing. In multi-character dialogue, camera design serves speaker ownership first. In high-reliability mode, each generated clip has one dialogue owner and a speaker change starts a new clip.
 
 ### Conditional negatives
 
 Mouth-motion risk:
 
 `exaggerated lip movement, over-articulated speech, large repetitive mouth opening, excessive jaw pumping, chewing-like dialogue motion, continuous mouth motion during pauses`
+
+Wrong-speaker risk:
+
+`wrong speaker, voice swap, dialogue ownership transfer, non-speaker lip-sync, multiple mouths sharing one line`
 
 Mandarin language drift:
 
