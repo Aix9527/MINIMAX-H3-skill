@@ -1,0 +1,108 @@
+name: Sync Releases / 同步版本发布
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bootstrap-historical-releases:
+    name: Bootstrap v1/v2 Releases / 补建 v1/v2 发布
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Create v1.0.0 if missing / 缺失时创建 v1.0.0
+        shell: bash
+        run: |
+          if gh release view v1.0.0 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "v1.0.0 release already exists / v1.0.0 Release 已存在"
+          else
+            cat > /tmp/v1-notes.md <<'EOF'
+          ## 中文
+          MiniMax H3 Director OS V1.0 首个正式版本。建立了导演优先的 H3 提示词生成核心，包括 Blocking、表演、动作物理、摄影、灯光、声音、Reference Contract、连续性与 QC Repair。
+
+          该版本对应 V1.0 完整仓库状态。
+
+          ## English
+          MiniMax H3 Director OS V1.0 initial formal release. It established the director-first H3 prompt-generation core, including blocking, performance, action physics, camera, lighting, audio, Reference Contract, continuity, and QC repair.
+
+          This release points to the complete V1.0 repository state.
+          EOF
+            gh release create v1.0.0 \
+              --repo "$GITHUB_REPOSITORY" \
+              --target 5eee1a5466345b82745da06364c1e2203f8a82fc \
+              --title "MiniMax H3 Director OS V1.0 / 导演系统 V1.0" \
+              --notes-file /tmp/v1-notes.md
+          fi
+
+      - name: Create v2.0.0 if missing / 缺失时创建 v2.0.0
+        shell: bash
+        run: |
+          if gh release view v2.0.0 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "v2.0.0 release already exists / v2.0.0 Release 已存在"
+          else
+            cat > /tmp/v2-notes.md <<'EOF'
+          ## 中文
+          MiniMax H3 Director OS V2.0 生产级重构版本。
+
+          主要升级：
+          - 以 MiniMax H3 原生 Prompt 契约作为硬底座；
+          - 引入 Prompt Budget Engine，分离项目级常量、镜头级变量和交接状态；
+          - 恢复并模块化数字真人、角色身份锁、微表演、战斗/VFX、环境损伤与语音身份；
+          - 强化 Reference Authority、首帧空间审计与 Accepted Footage 连续性；
+          - 加入自适应时间节拍、按需 Negative、QC/Retake 修复阶梯；
+          - 保留 schemaVersion 4 director.json 工作流兼容。
+
+          ## English
+          MiniMax H3 Director OS V2.0 production-grade rebuild.
+
+          Major upgrades:
+          - Uses the MiniMax H3 native prompt contract as the hard floor;
+          - Adds the Prompt Budget Engine to separate project invariants, shot variables, and handoff state;
+          - Restores and modularizes digital-human realism, identity locks, micro-performance, combat/VFX, environment damage, and audio identity;
+          - Strengthens Reference Authority, first-frame spatial audit, and Accepted Footage continuity;
+          - Adds adaptive time beats, targeted negatives, and a QC/retake repair ladder;
+          - Preserves compatibility with the schemaVersion 4 director.json workflow.
+          EOF
+            gh release create v2.0.0 \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "$GITHUB_SHA" \
+              --title "MiniMax H3 Director OS V2.0 / 导演系统 V2.0" \
+              --notes-file /tmp/v2-notes.md
+          fi
+
+  release-from-version-tag:
+    name: Release Tag / 发布版本标签
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Create Release if missing / 缺失时创建 Release
+        shell: bash
+        run: |
+          TAG="$GITHUB_REF_NAME"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "$TAG release already exists / $TAG Release 已存在"
+            exit 0
+          fi
+          cat > /tmp/release-notes.md <<EOF
+          ## 中文
+          此 Release 对应版本标签 **$TAG**。版本变化请查看该版本中的 CHANGELOG.md 与仓库 README。
+
+          ## English
+          This Release corresponds to version tag **$TAG**. See CHANGELOG.md and the repository README at this version for the detailed changes.
+          EOF
+          gh release create "$TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --verify-tag \
+            --title "$TAG / 版本 $TAG" \
+            --notes-file /tmp/release-notes.md
