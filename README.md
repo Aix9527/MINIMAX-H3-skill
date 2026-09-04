@@ -120,9 +120,9 @@ Output director.json using my V10.2 schemaVersion 4 format.
 
 ## 来源对比 / Source Review
 
-V2.0 是在对比多套 H3 Prompt Skill、导演框架、98 个电影微 Skill、Seedance 2.0、ComfyUI-H3-Director、Thedore V9、Thedore V10.2 与 V1.0 后重构的。完整优缺点与融合依据见 [`docs/SOURCE_COMPARISON.md`](./docs/SOURCE_COMPARISON.md)。
+V2.0 是在对比多套 H3 Prompt Skill、导演框架、98 个电影微 Skill、Seedance 2.0、ComfyUI-H3-提示词、等skill重构的。完整优缺点与融合依据见 [`docs/SOURCE_COMPARISON.md`](./docs/SOURCE_COMPARISON.md)。
 
-V2.0 was rebuilt after comparing multiple H3 prompt Skills, director frameworks, the 98-skill film craft library, Seedance 2.0, ComfyUI-H3-Director, Thedore V9, Thedore V10.2, and V1.0. See [`docs/SOURCE_COMPARISON.md`](./docs/SOURCE_COMPARISON.md) for the full strengths/weaknesses review and merge rationale.
+V2.0 was rebuilt by comparing multiple sets of H3 Prompt Skills, director frameworks, 98 micro movie skills, Seedance 2.0, ComfyUI-H3 prompts, and other skills. You can see the full pros and cons and the basis for the integration at [`docs/SOURCE_COMPARISON.md`](./docs/SOURCE_COMPARISON.md) for the full strengths/weaknesses review and merge rationale.
 
 ## 版本发布 / Releases
 
