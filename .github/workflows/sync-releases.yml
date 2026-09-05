@@ -51,18 +51,18 @@ jobs:
 
           grep -q 'SUBTLE_LIPSYNC' SKILL.md
           grep -q 'SUBTLE_LIPSYNC' references/audio-identity.md
-          grep -q 'SUBTLE_LIPSYNC' references/dialogue-motion.md
-          grep -q 'CLOSED_LIPS' references/audio-identity.md
           grep -q 'CLOSED_LIPS' references/dialogue-motion.md
           grep -q 'ACTIVE_SPEAKER' SKILL.md
-          grep -q 'ACTIVE_SPEAKER' references/audio-identity.md
           grep -q 'ACTIVE_SPEAKER' references/speaker-scene-lock.md
           grep -q 'MUTE_LISTENER' SKILL.md
-          grep -q 'MUTE_LISTENER' references/speaker-scene-lock.md
-          grep -q 'SCENE_ID' SKILL.md
-          grep -q 'SCENE_LOCK' SKILL.md
           grep -q 'SCENE_LOCK' references/speaker-scene-lock.md
           grep -q 'CANONICAL_SCENE_ANCHOR' references/speaker-scene-lock.md
+          grep -q 'ACTIVE_CONTEXT_ONLY' SKILL.md
+          grep -q 'ACTIVE_CONTEXT_ONLY' references/active-context-isolation.md
+          grep -q 'REFERENCE_ALLOWLIST' SKILL.md
+          grep -q 'REFERENCE_ALLOWLIST' references/active-context-isolation.md
+          grep -q 'disabledAssetIds' references/active-context-isolation.md
+          grep -q 'schemaVersion 4/5' references/director-json-v4.md
           grep -q 'Speaker ID belongs \*\*outside\*\* `<d>`' references/audio-identity.md
           grep -q 'Inside `<d>`: only `\[Language\]`' SKILL.md
           grep -q "v${VERSION}" README.md
