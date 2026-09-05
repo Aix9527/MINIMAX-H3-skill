@@ -2,6 +2,8 @@
 
 This module combines reference-role isolation, first-frame geography, accepted-footage canon, and long-sequence state management.
 
+For per-shot asset filtering, also use [Reference Router](reference-router.md). For future-state isolation, also use [Shot Scope Compiler](shot-scope-compiler.md).
+
 ## Reference authority matrix
 
 For each target subject/scene and controlled dimension, select one winning reference or none.
@@ -14,12 +16,14 @@ A single source may own multiple dimensions. No dimension should have two winner
 
 ### Common roles
 
-- Canonical portrait/character sheet → identity, hair, wardrobe, body design.
+- Canonical portrait/character sheet → identity, hair, body design, and only the wardrobe/state that is temporally valid now.
 - First frame → instantaneous pose, screen position, composition, current lighting.
 - Last frame → required endpoint composition/state.
 - Motion/reference video → action path, blocking, camera rhythm or timing only as declared.
-- Environment picture/video → geography, material, palette, light direction.
+- Environment picture/video → geography, material, palette, light direction for the current scene state.
 - Audio → voice, timing, music or exact sound only as declared.
+
+A reference that depicts a future injury, costume state, location state or reveal is not automatically valid just because it belongs to the same character or place.
 
 ## First-frame truth
 
@@ -33,15 +37,17 @@ Keep two levels.
 
 ### Canonical state
 
-Long-lived facts:
+Long-lived facts that are valid **at the current story time**:
 
-- identity and visual version;
-- wardrobe/props;
-- location/time/world state;
-- persistent injury/VFX/damage;
+- stable identity and visual version;
+- current wardrobe/props;
+- current location/time/world state;
+- persistent injury/VFX/damage that has already happened;
 - voice identity;
 - completed story beats/dialogue;
-- canonical references.
+- canonical references valid for the current state.
+
+Do not use canonical state as a container for future planned injuries, bandages, wardrobe damage, transformed forms or future scene states. Future planned facts stay in Director timeline knowledge until their validity boundary is reached.
 
 ### Transient shot state
 
@@ -57,7 +63,7 @@ Boundary facts:
 
 Lifecycle:
 
-`plannedStart → generate → observedStart/observedEnd → take verdict → canonical reconcile → next plannedStart`
+`plannedStart → resolve current temporal state → build ACTIVE_SHOT_SCOPE / ACTIVE_REFERENCE_SET → generate → observedStart/observedEnd → take verdict → canonical reconcile → next plannedStart`
 
 ## Accepted footage rule
 
@@ -65,6 +71,7 @@ Lifecycle:
 - Rejected footage never updates canon.
 - If the plan says a hand reached the handle but accepted footage ends 20 cm short, the next clip starts 20 cm short.
 - Pixels can establish physical state, not hidden psychology.
+- An accepted accidental future-state leak should not silently redefine the story timeline; if the take is rejected for semantic leakage, it does not update canon.
 
 Do not fake `observedEndState` when the clip cannot be viewed. Keep planned state and provenance separate.
 
@@ -78,7 +85,7 @@ Choose explicitly:
 - `repair_tail` — fix a failed ending before extending it.
 - `reanchor_after_drift` — return to canonical references after identity/geography/motion/audio drift.
 
-Do not promise a seamless continuation across a scene/location/time boundary; default to an intentional cut.
+Do not promise a seamless continuation across a scene/location/time/state boundary; default to an intentional cut/re-anchor when the previous latent/context is foreign to the current scope.
 
 ## Output-derived chain depth
 
@@ -92,6 +99,7 @@ Prefer boundaries at:
 - stable pose/end composition;
 - emotional/value turn;
 - intentional shot/scene change;
+- character-state transition;
 - finished dialogue phrase;
 - moment where motion phase is easy to resume.
 
@@ -99,4 +107,6 @@ Do not split a sentence or contact action unless continuation genuinely needs to
 
 ## Future-beat protection
 
-Each segment receives only its current job. Completed beats are not repeated. Future reveals, attacks, transformations and dialogue are not leaked into earlier segments simply because they appear later in the script.
+Each segment receives only its current job. Completed beats are not repeated. Future reveals, attacks, transformations, dialogue, injuries, scene states and references are not leaked into earlier segments simply because they appear later in the script.
+
+Before runtime emission, filter through `ACTIVE_SHOT_SCOPE` and `ACTIVE_REFERENCE_SET`. Future planned information remains in Director/compiler knowledge only.
