@@ -4,7 +4,7 @@
 
 该模块用于解决生成视频中人物说话时嘴唇和下颌动作过大的问题。普通影视对白默认使用 `SUBTLE_LIPSYNC`，声音清晰度与嘴部动作幅度必须分开控制。
 
-如需防止人物串台词，同时读取 [Speaker Ownership & Scene Lock](speaker-scene-lock.md)。
+如需防止人物串台词，同时读取 [Speaker Ownership & Scene Lock](speaker-scene-lock.md)。长篇剧情编译时同时服从 [Shot Scope Compiler](shot-scope-compiler.md)。
 
 ### H3 对白语法硬规则
 
@@ -57,12 +57,42 @@
 - `1.0–6.2s` 对白；
 - `6.2–8.0s` 嘴部回落、呼吸、反应。
 
-台词过长时，优先级改为：
+这些是生产建议，不是 MiniMax H3 官方时长限制。
 
-1. 拆成多个生成段；
-2. 延长可用对白时长；
-3. 保持原说话者作为主要可见人物；
-4. 只有确实需要时才使用短离屏对白。
+## Dialogue Density Gate / 对白密度门禁
+
+在编译对白镜头前先计算：
+
+```text
+speech_density = spoken_Han_characters / available_speech_seconds
+```
+
+其中：
+
+- `spoken_Han_characters` 只统计实际要说出的中文主体字符，不把标点、Speaker ID、`<d>` 标签计入；
+- `available_speech_seconds` 是时间轴中真正留给说话的时长，不是整个 clip 总时长；
+- 若同一段存在两段 separated phrases，可分别检查并再检查总负荷。
+
+建议生产门槛（经验型启发式，不是 H3 官方限制）：
+
+| 密度 | 判定 | 默认动作 |
+|---|---|---|
+| `<= 5.0 chars/s` | PASS | 正常编译 |
+| `>5.0–5.5` | CAUTION | 检查情绪、停顿和口型负担 |
+| `>5.5–6.5` | SPLIT_RECOMMENDED | 优先拆句/加时长 |
+| `>6.5` | HARD_SPLIT | 默认不得直接编译成长对白镜头 |
+
+若对白要求强情绪、清晰停顿、明显反应、复杂肢体动作或多人同框，应该比上表更保守。
+
+触发 `DIALOGUE_DENSITY_OVERLOAD` 时，修复顺序：
+
+1. 在自然语义边界拆成多个生成段；
+2. 延长真正的对白时间；
+3. 删除不必要的同段反应镜头/复杂动作，让一个 clip 只完成一个主要对白任务；
+4. 保持原说话者作为主要可见人物；
+5. 只有确实需要时才使用短离屏对白。
+
+**不得通过要求模型“说快一点”“加强口型”“更明显咬字”来解决对白过载。** 这通常会进一步增加嘴型、身份和画面稳定性风险。
 
 不要再默认使用“人物 A 说到一半 → 切人物 B 完整正脸 → A 离屏继续长时间说话”。这会增加台词被人物 B 接管的风险。
 
@@ -105,13 +135,13 @@ The woman (S1) says in an off-screen voiceover: <d>[Chinese] 中文内心独白�
 
 `English speech, English dialogue, translated dialogue, prompt text read aloud`
 
-不要把这些 Negative 加到无对白镜头。
+不要把这些 Negative 加到无对白镜头。不要用 future-scene/future-state 的详细名词作为对白 Negative；语义隔离交给 Shot Scope Compiler。
 
 ## English
 
 This module addresses overly visible lip and jaw motion during generated dialogue. Ordinary cinematic dialogue defaults to `SUBTLE_LIPSYNC`. Audio intelligibility and visible mouth-motion amplitude must be controlled separately.
 
-For wrong-speaker prevention, also read [Speaker Ownership & Scene Lock](speaker-scene-lock.md).
+For wrong-speaker prevention, also read [Speaker Ownership & Scene Lock](speaker-scene-lock.md). Long-form narrative compilation also follows [Shot Scope Compiler](shot-scope-compiler.md).
 
 ### Canonical H3 dialogue syntax
 
@@ -158,7 +188,24 @@ Prefer:
 
 `reaction / inhale → speech → short pause → mouth settles → reaction`
 
-If a line is too long, prioritize splitting it across generation clips, adding time, and keeping the original speaker visually dominant. Do not default to carrying a long off-screen line across another character's full frontal face.
+### Dialogue Density Gate
+
+Before compiling a dialogue clip, calculate:
+
+```text
+speech_density = spoken_Han_characters / available_speech_seconds
+```
+
+Production heuristic, not an official H3 model limit:
+
+- `<=5.0 chars/s` → PASS;
+- `>5.0–5.5` → CAUTION;
+- `>5.5–6.5` → SPLIT_RECOMMENDED;
+- `>6.5` → HARD_SPLIT by default.
+
+Complex acting, emotional pauses, multi-person staging or strong physical action should use a more conservative threshold.
+
+If a line is too dense, split at a semantic boundary, add actual speech time, simplify simultaneous action and keep the original speaker visually dominant. Do not solve dense speech by demanding faster delivery or stronger mouth articulation.
 
 ### Safe listener reactions
 
@@ -176,7 +223,7 @@ Prefer medium close-ups, three-quarter angles, or natural eye-level framing. In 
 
 Mouth-motion risk:
 
-`exaggerated lip movement, over-articulated speech, large repetitive mouth opening, excessive jaw pumping, chewing-like dialogue motion, continuous mouth motion during pauses`
+`exaggerated lip movement, over-articulated speech, large repetitive mouth opening, excessive jaw pumping, chewing-like speech motion, continuous mouth motion during pauses`
 
 Wrong-speaker risk:
 
@@ -186,4 +233,4 @@ Mandarin language drift:
 
 `English speech, English dialogue, translated dialogue, prompt text read aloud`
 
-Do not add these negatives to silent shots.
+Do not add these negatives to silent shots, and do not use detailed future scene/state nouns merely to negate them.
