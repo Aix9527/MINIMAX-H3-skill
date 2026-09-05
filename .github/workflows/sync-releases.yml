@@ -132,6 +132,44 @@ jobs:
             --title "MiniMax H3 Director OS V${VERSION} / 导演系统 V${VERSION}" \
             --notes-file /tmp/release-notes.md
 
+  refresh-v2-3-1-snapshot:
+    name: Refresh V2.3.1 Snapshot / 刷新 V2.3.1 快照
+    needs:
+      - public-naming-policy
+      - skill-contract-check
+    if: github.ref == 'refs/heads/main' && github.event.head_commit.message == 'ci refresh v2.3.1 snapshot'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout repository / 检出仓库
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Refresh v2.3.1 tag and release / 刷新 v2.3.1 标签与发布
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -f v2.3.1 "$GITHUB_SHA"
+          git push --force origin refs/tags/v2.3.1
+
+          python3 - <<'PY' > /tmp/v231-notes.md
+          import re
+          from pathlib import Path
+          text = Path('CHANGELOG.md').read_text(encoding='utf-8')
+          match = re.search(r'^## 2\.3\.1[^\n]*\n(.*?)(?=^## |\Z)', text, flags=re.M | re.S)
+          print('## 版本 2.3.1 / Version 2.3.1\n')
+          print(match.group(1).strip() if match else 'See CHANGELOG.md for details.')
+          PY
+
+          gh release edit v2.3.1 \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "MiniMax H3 Director OS V2.3.1 / 导演系统 V2.3.1" \
+            --notes-file /tmp/v231-notes.md
+
   verify-tag-release:
     name: Verify Tagged Release / 校验标签版本发布
     needs:
