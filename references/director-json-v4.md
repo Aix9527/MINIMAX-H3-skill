@@ -78,6 +78,58 @@ Default guidance:
 
 A large bank of eye/lip/hand/expression/turnaround images for one character can overpower another character and increase identity cloning or speaker confusion. Activate detail images only for a specific repair task.
 
+## BIDIRECTIONAL_ASSET_LINK
+
+`disabledAssetIds` and `assets[].shotIds` are two views of the same current relationship and must never disagree.
+
+For every asset `A` and shot `S`:
+
+```text
+A.id NOT IN S.disabledAssetIds
+    ⇔
+S.id IN A.shotIds
+```
+
+After computing the shot-level `REFERENCE_ALLOWLIST`:
+
+1. generate each shot's complete `disabledAssetIds` from the project asset pool;
+2. rebuild every `asset.shotIds` from those disable lists;
+3. do not preserve stale `shotIds` from an older wider-reference project version;
+4. validate the bidirectional relation before delivery.
+
+A common failure is:
+
+- the shot disables an asset;
+- the asset still lists that shot in `shotIds`;
+- the runtime reports `未找到或已禁用素材` even though the image file exists.
+
+Use [Director Asset-Link Consistency](asset-link-consistency.md) for the full contract.
+
+Repository validator:
+
+```bash
+python scripts/validate_director_asset_links.py project.director.json
+```
+
+Repair mode:
+
+```bash
+python scripts/validate_director_asset_links.py project.director.json --repair --output fixed.director.json
+```
+
+## Asset file/fingerprint validation
+
+Relationship consistency and file existence are separate checks.
+
+If the runtime reports a missing-or-disabled alias:
+
+- verify the alias exists in the imported asset package;
+- compare the asset `fingerprint` with the actual file SHA256 when available;
+- verify the path/sourcePath can be resolved by the importer;
+- then verify the bidirectional shot/asset relationship.
+
+If alias and fingerprint match, repair the relationship instead of regenerating the source image.
+
 ## `latentRelay`
 
 Use `true` only for a valid same-continuity inheritance chain. Use `false` for:
@@ -107,5 +159,7 @@ Before export:
 - verify every speaking shot has only the intended active speaker ownership;
 - verify global prefix/suffix contain no future `SCENE_ID` or inactive character registry;
 - verify `disabledAssetIds` excludes irrelevant project assets when an asset pool is present;
+- verify every asset/shot pair satisfies `BIDIRECTIONAL_ASSET_LINK`;
+- run `python scripts/validate_director_asset_links.py <file>` when exporting a director project;
 - verify scene returns use re-anchor instead of foreign-scene latent inheritance;
 - verify the H3 field order remains valid inside each `shot.prompt`.
