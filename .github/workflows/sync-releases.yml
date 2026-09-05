@@ -62,10 +62,13 @@ jobs:
           grep -q 'REFERENCE_ALLOWLIST' SKILL.md
           grep -q 'REFERENCE_ALLOWLIST' references/active-context-isolation.md
           grep -q 'disabledAssetIds' references/active-context-isolation.md
+          grep -q 'BIDIRECTIONAL_ASSET_LINK' SKILL.md
+          grep -q 'A.id NOT IN S.disabledAssetIds' references/asset-link-consistency.md
           grep -q 'schemaVersion 4/5' references/director-json-v4.md
           grep -q 'Speaker ID belongs \*\*outside\*\* `<d>`' references/audio-identity.md
           grep -q 'Inside `<d>`: only `\[Language\]`' SKILL.md
           grep -q "v${VERSION}" README.md
+          python3 scripts/validate_director_asset_links.py --self-test
 
           echo "Skill contract passed for v${VERSION} / v${VERSION} Skill 契约检查通过"
 
