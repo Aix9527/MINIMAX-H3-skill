@@ -1,5 +1,29 @@
 # 更新日志 / Changelog
 
+## 2.3.1 — 2026-09-05
+
+### 中文
+
+- 修复 `disabledAssetIds` 与 `assets[].shotIds` 双向关系不一致导致的“未找到或已禁用素材”报错。
+- 新增 `BIDIRECTIONAL_ASSET_LINK` 契约：对任意资产 A 和镜头 S，必须满足 `A.id NOT IN S.disabledAssetIds ⇔ S.id IN A.shotIds`。
+- `REFERENCE_ALLOWLIST` 编译流程调整为：先计算镜头白名单，再生成 `disabledAssetIds`，最后反向重建全部 `asset.shotIds`。
+- 禁止保留旧版本中与新白名单冲突的 stale `shotIds`。
+- 新增 `references/asset-link-consistency.md`。
+- 新增 `scripts/validate_director_asset_links.py`，支持检查和 `--repair` 自动修复 schemaVersion 4/5 director 项目。
+- CI 新增资产关系 validator self-test，确保真实 RED 样例可被检测、修复后 GREEN。
+- 明确文件存在性/fingerprint 校验与资产关系校验必须分开：若 alias 存在且 SHA256 与 fingerprint 一致，只修关系，不重做图片。
+
+### English
+
+- Fixed `missing or disabled asset` runtime failures caused by disagreement between `disabledAssetIds` and `assets[].shotIds`.
+- Added the `BIDIRECTIONAL_ASSET_LINK` contract: for every asset A and shot S, enforce `A.id NOT IN S.disabledAssetIds ⇔ S.id IN A.shotIds`.
+- The reference compiler now computes shot allowlists first, derives `disabledAssetIds`, then rebuilds every `asset.shotIds` from the resulting active links.
+- Stale shot links from older wider-reference projects must not survive a narrowed V2.3 allowlist.
+- Added `references/asset-link-consistency.md`.
+- Added `scripts/validate_director_asset_links.py` with validation and `--repair` support for schemaVersion 4/5 director projects.
+- CI now runs the asset-link validator self-test so the known broken state is detected and the repaired state passes.
+- File/fingerprint validation is separated from relationship validation: if an alias exists and the file SHA256 matches its fingerprint, repair links instead of regenerating the image.
+
 ## 2.3.0 — 2026-09-05
 
 ### 中文
