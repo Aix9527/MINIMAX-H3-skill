@@ -7,6 +7,8 @@
 1. 人物 A 的台词被人物 B 说出；
 2. 同一地点在不同生成段中发生房间布局、道具位置、光线方向或空间关系漂移。
 
+涉及未来剧情/场景/人物状态泄漏时，同时读取 [Shot Scope Compiler](shot-scope-compiler.md)。
+
 ## 1. ACTIVE_SPEAKER 唯一对白所有权
 
 对白镜头默认建立一个唯一的 `ACTIVE_SPEAKER`。
@@ -82,13 +84,22 @@ RIVAL_GIRL (S2) says: <d>[Chinese] 你到底想干什么？</d>
 - 摄影机所在轴线/常用侧；
 - 主光来源、方向、色温和时间相位；
 - 地面、墙体、主要材质；
-- 已发生且应持续的损坏、污渍、伤口或物件状态。
+- 已经发生且在当前时间点有效的损坏、污渍、伤口或物件状态。
 
-这些信息构成 `SCENE_LOCK`。
+这些信息构成该场景的 Director-side `SCENE_LOCK`。
 
-## 5. 每镜重复“紧凑场景锁”，不要只靠全局 Prompt
+## 5. 完整 Scene Bible 只属于 Director，不属于运行时 H3
 
-全局 Prompt 可以保存完整 Scene Bible，但每个属于该场景的生成段都应重复一条紧凑场景锁，例如：
+**完整 Scene Bible 不得作为全局 runtime Prompt 注入所有镜头。**
+
+Director/compiler 可以保存整个项目的所有场景资料，但当前 H3 生成段只接收：
+
+- 当前 `SCENE_ID`；
+- 当前场景的一条紧凑 `SCENE_LOCK`；
+- 当前时间点有效的场景状态；
+- 当前需要的 canonical scene anchor/reference。
+
+每个属于该场景的生成段都重复紧凑场景锁，例如：
 
 ```text
 SCENE_LOCK BEDROOM_A:
@@ -98,7 +109,7 @@ old timber rafters overhead; dim natural light enters from rear-right;
 geometry, prop positions and light direction must remain unchanged.
 ```
 
-不要假设模型会仅凭 `promptPrefix` 自动记住前面生成段的全部空间关系。
+不要把其他未来场景、梦境场景、闪回场景或尚未出现的场景描述一起塞进 `promptPrefix`。不要假设“写了不要切场”就能抵消其他场景名称已经进入模型上下文所造成的语义泄漏。
 
 ## 6. Accepted Scene Anchor
 
@@ -124,11 +135,15 @@ geometry, prop positions and light direction must remain unchanged.
 
 `RE-ANCHOR SCENE_ID = ...; ignore the immediately previous foreign-scene geometry.`
 
+并重新构建当前镜头的 `ACTIVE_REFERENCE_SET`，不得保留上一外国场景的环境参考。
+
 ## 8. 场景一致性 Negative
 
-仅在存在漂移风险时加入：
+仅在存在漂移风险时加入抽象风险族：
 
-`scene redesign, room layout drift, prop relocation, doorway relocation, window relocation, furniture replacement, light direction drift, wall material drift, spatial reset`
+`scene redesign, room layout drift, prop relocation, doorway relocation, window relocation, furniture replacement, light direction drift, wall material drift, spatial reset, location substitution, unmotivated scene change`
+
+不要为了否定未来场景而把未来场景名称写进 Negative。详细未来名词仍然属于语义泄漏。
 
 ## 9. QC
 
@@ -138,7 +153,8 @@ geometry, prop positions and light direction must remain unchanged.
 - 是否所有其他人物都明确 `MUTE_LISTENER`；
 - 是否存在另一个完整正脸在承接离屏长对白；
 - Speaker ID 是否在 `<d>` 外；
-- 声音来源方向是否与说话者位置一致。
+- 声音来源方向是否与说话者位置一致；
+- ACTIVE_SPEAKER 的身份/状态参考是否被另一角色的大量参考图压过。
 
 场景镜头交付前检查：
 
@@ -146,13 +162,14 @@ geometry, prop positions and light direction must remain unchanged.
 - 紧凑 `SCENE_LOCK` 是否重复到当前镜头；
 - 锚点位置、主光方向、材质是否与前镜一致；
 - 返回旧场景时是否使用 canonical scene anchor 或显式 re-anchor；
-- 是否误把其他场景/蒙太奇尾帧作为当前场景连续性来源。
+- 是否误把其他场景/蒙太奇尾帧作为当前场景连续性来源；
+- runtime prefix/suffix 是否泄漏其他场景描述。
 
 ---
 
 ## English
 
-This module prevents two common failures: dialogue migrating to the wrong visible character and spatial redesign of the same location across generated clips.
+This module prevents two common failures: dialogue migrating to the wrong visible character and spatial redesign of the same location across generated clips. For future-state/scene leakage, also use [Shot Scope Compiler](shot-scope-compiler.md).
 
 ### ACTIVE_SPEAKER
 
@@ -166,7 +183,9 @@ Do not default to `speaker A talks → cut to listener B's full frontal face →
 
 ### SCENE_ID and SCENE_LOCK
 
-Give every recurring location a stable `SCENE_ID` and lock its geometry, anchor-object positions, traversable paths, camera axis, material identity, light source/direction, time phase, and persistent damage/state. Repeat a compact `SCENE_LOCK` inside every shot belonging to that scene instead of relying only on a global prompt.
+Give every recurring location a stable `SCENE_ID` and lock its geometry, anchor-object positions, traversable paths, camera axis, material identity, light source/direction, time phase, and persistent state that is already valid at the current story time.
+
+The complete Scene Bible is Director/compiler knowledge only. It must not be injected into every runtime H3 prompt. Each generated segment receives only the current `SCENE_ID`, a compact current-scene `SCENE_LOCK`, current state deltas and current canonical scene reference when needed.
 
 ### Accepted Scene Anchor
 
@@ -174,4 +193,6 @@ After the first accepted view of a location, save a stable frame as the `CANONIC
 
 ### Scene consistency negatives
 
-When risk exists, use: `scene redesign, room layout drift, prop relocation, doorway relocation, window relocation, furniture replacement, light direction drift, wall material drift, spatial reset`.
+When risk exists, use abstract risk categories such as: `scene redesign, room layout drift, prop relocation, doorway relocation, window relocation, furniture replacement, light direction drift, wall material drift, spatial reset, location substitution, unmotivated scene change`.
+
+Do not inject detailed future scene nouns merely to negate them.
