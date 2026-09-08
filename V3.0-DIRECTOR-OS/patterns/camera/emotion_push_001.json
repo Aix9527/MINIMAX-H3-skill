@@ -1,0 +1,7 @@
+{
+  "id": "emotion_push_001",
+  "type": "camera",
+  "purpose": "increase emotional intensity",
+  "movement": "slow push in",
+  "recommended_for": ["sadness", "memory", "confession"]
+}
