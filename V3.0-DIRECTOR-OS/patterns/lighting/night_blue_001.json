@@ -1,0 +1,8 @@
+{
+  "id": "night_blue_001",
+  "type": "lighting",
+  "time": "night",
+  "source": "street light",
+  "color": "cold blue",
+  "contrast": "medium"
+}
