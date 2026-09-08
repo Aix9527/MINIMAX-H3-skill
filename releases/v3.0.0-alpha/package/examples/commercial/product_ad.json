@@ -1,0 +1,10 @@
+{
+  "project":"cinematic_product_ad_example",
+  "purpose":"commercial_video",
+  "rules":{
+    "product_identity_lock":true,
+    "macro_detail_priority":true,
+    "final_product_frame":true
+  },
+  "workflow":"product_reference_to_cinematic_shots"
+}
