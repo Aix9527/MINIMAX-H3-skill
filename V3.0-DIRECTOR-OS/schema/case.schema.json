@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MiniMax H3 Director OS Case Schema",
+  "type": "object",
+  "required": ["id","type","directorIntent"],
+  "properties": {
+    "id": {"type":"string"},
+    "type": {"type":"string"},
+    "directorIntent": {"type":"string"},
+    "scene": {"type":"object"},
+    "emotion": {"type":"string"},
+    "camera": {"type":"object"},
+    "audio": {"type":"object"}
+  }
+}
