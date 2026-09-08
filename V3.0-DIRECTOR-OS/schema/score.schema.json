@@ -1,0 +1,11 @@
+{
+  "$schema":"http://json-schema.org/draft-07/schema#",
+  "title":"Prompt Quality Score",
+  "type":"object",
+  "properties":{
+    "score":{"type":"number"},
+    "level":{"type":"string"},
+    "status":{"type":"string"},
+    "risk":{"type":"object"}
+  }
+}
