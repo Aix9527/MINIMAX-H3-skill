@@ -1,0 +1,9 @@
+{
+  "type": "dialogue_test",
+  "speakerControl": {
+    "activeSpeaker": "character_A",
+    "listener": "character_B",
+    "mouthMotion": "active speaker only"
+  },
+  "camera": "over shoulder"
+}
