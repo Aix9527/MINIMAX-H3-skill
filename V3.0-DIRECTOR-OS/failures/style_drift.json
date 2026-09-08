@@ -1,0 +1,14 @@
+{
+  "id": "style_drift",
+  "name": "Visual Style Drift",
+  "risk": "MEDIUM",
+  "trigger": [
+    "inconsistent color tone",
+    "camera language changes"
+  ],
+  "solution": [
+    "style memory lock",
+    "reuse lighting pattern",
+    "reuse camera pattern"
+  ]
+}
