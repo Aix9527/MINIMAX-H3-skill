@@ -1,0 +1,14 @@
+{
+  "id": "motion_collapse",
+  "name": "Motion Complexity Collapse",
+  "risk": "HIGH",
+  "trigger": [
+    "multiple primary actions",
+    "too many events in one shot"
+  ],
+  "solution": [
+    "split shots",
+    "keep one dominant action",
+    "define final frame"
+  ]
+}
