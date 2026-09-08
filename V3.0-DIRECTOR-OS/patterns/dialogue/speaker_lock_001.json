@@ -1,0 +1,7 @@
+{
+  "id": "speaker_lock_001",
+  "type": "dialogue",
+  "activeSpeakerOnly": true,
+  "listenerMode": "silent",
+  "cameraRecommendation": "over shoulder or speaker close up"
+}
