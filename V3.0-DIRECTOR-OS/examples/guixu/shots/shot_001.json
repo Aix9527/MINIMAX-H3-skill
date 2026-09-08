@@ -1,0 +1,10 @@
+{
+  "id": "gx001",
+  "purpose": "world_establish",
+  "action": "character slowly opens eyes",
+  "camera": "slow push in",
+  "lighting": "blue gray night light",
+  "audio": ["wind", "falling debris", "low energy hum"],
+  "ending": "eye close up",
+  "constraint": "single action only"
+}
