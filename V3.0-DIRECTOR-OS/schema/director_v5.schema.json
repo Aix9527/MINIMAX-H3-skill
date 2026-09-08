@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MiniMax H3 Director OS v5",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {"type": "integer"},
+    "project": {"type": "object"},
+    "directorAI": {"type": "object"},
+    "characters": {"type": "array"},
+    "scenes": {"type": "array"},
+    "shots": {"type": "array"}
+  }
+}
