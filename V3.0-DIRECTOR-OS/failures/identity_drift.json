@@ -1,0 +1,14 @@
+{
+  "id": "identity_drift",
+  "name": "Character Identity Drift",
+  "risk": "HIGH",
+  "trigger": [
+    "face changes",
+    "hair changes",
+    "costume changes"
+  ],
+  "solution": [
+    "character memory lock",
+    "reference identity constraint"
+  ]
+}
