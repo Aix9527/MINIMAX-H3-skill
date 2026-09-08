@@ -1,0 +1,13 @@
+{
+  "id": "suwan",
+  "name": "苏晚",
+  "locked_identity": {
+    "face": true,
+    "hair": true,
+    "costume": true
+  },
+  "constraints": [
+    "maintain same appearance",
+    "no costume drift"
+  ]
+}
