@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MiniMax H3 Director OS Shot Schema",
+  "type": "object",
+  "required": ["id","action","camera","ending"],
+  "properties": {
+    "id": {"type":"string"},
+    "duration": {"type":"number"},
+    "purpose": {"type":"string"},
+    "action": {"type":"object"},
+    "camera": {"type":"object"},
+    "lighting": {"type":"object"},
+    "audio": {"type":"object"},
+    "ending": {"type":"string"}
+  }
+}
