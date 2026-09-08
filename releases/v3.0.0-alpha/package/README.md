@@ -4,7 +4,7 @@
 
 This is the complete MiniMax H3 Director Skill Package.
 
-It converts story ideas into structured cinematic video prompts through a director workflow.
+It converts story ideas into structured cinematic video prompts through an AI director workflow.
 
 ## Package Structure
 
@@ -28,22 +28,24 @@ Story Input
     ↓
 Director Brain
     ↓
-Scene Analysis
+Story Analysis
+    ↓
+Character / Scene Memory
     ↓
 Shot Planning
     ↓
 Prompt Compiler
+    ↓
+Quality Gate
     ↓
 MiniMax H3 Generation
 ```
 
 ## H3 Production Rules
 
-### Single Action Principle
+### 1. Single Action Principle
 
 One prompt describes one primary action.
-
-Example:
 
 Good:
 
@@ -57,40 +59,57 @@ Avoid:
 She opens the door, walks across the room, sits down and starts typing.
 ```
 
-### Camera Language
+Complex scenes should be split into multiple shots.
 
-Define:
+### 2. Camera Language
+
+Every shot should define camera behavior:
 
 - push in
 - pull back
 - tracking shot
 - handheld movement
 - aerial shot
+- close-up
+- over-the-shoulder
 
-### Audio Design
+### 3. Audio Design
 
-Include:
+Use native H3 audio generation:
 
 - environment sound
 - action sound
-- dialogue
 - atmosphere
+- dialogue
 
-### Continuity Control
+### 4. Continuity Control
 
-Use:
+Maintain:
 
 - character memory
 - scene memory
 - style memory
+- costume consistency
+- prop consistency
 
-### Speaker Lock
+### 5. Speaker Lock
 
-For dialogue scenes:
+Dialogue scenes use ownership control:
 
-- only active speaker performs mouth movement
+- only active speaker moves mouth
 - listener remains silent
-- maintain character ownership
+- prevent speaker swap
+- preserve character identity
+
+### 6. Visual Style Control
+
+Define:
+
+- lighting
+- color palette
+- lens feeling
+- cinematic mood
+- pacing
 
 ## Import
 
@@ -101,12 +120,19 @@ Use `director.json` for structured generation configuration.
 ## Included Modules
 
 - Director Brain
+- Story Analyzer
 - Prompt Compiler
 - Shot Planner
 - Quality Gate
 - Character Continuity Rules
+- Scene Memory System
 - Case Library
 - Camera Patterns
 - Audio Patterns
 - Lighting Patterns
 - Failure Prevention Rules
+- Production Examples
+
+## Version
+
+MiniMax H3 Director OS v3.0.0-alpha
