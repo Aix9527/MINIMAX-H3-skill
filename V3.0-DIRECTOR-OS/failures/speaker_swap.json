@@ -1,0 +1,15 @@
+{
+  "id": "speaker_swap",
+  "name": "Speaker Ownership Failure",
+  "risk": "HIGH",
+  "trigger": [
+    "multiple visible speakers",
+    "dialogue in same shot",
+    "no active speaker lock"
+  ],
+  "solution": [
+    "define active speaker",
+    "use OTS camera",
+    "disable listener mouth movement"
+  ]
+}
