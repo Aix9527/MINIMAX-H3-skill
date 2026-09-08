@@ -1,0 +1,7 @@
+{
+  "id": "rain_emotion_001",
+  "type": "audio",
+  "ambient": ["rain", "wind", "distant traffic"],
+  "action": ["footsteps", "water drops"],
+  "emotion": "loneliness"
+}
