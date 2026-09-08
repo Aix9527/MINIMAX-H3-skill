@@ -1,0 +1,1 @@
+{"id":"single_emotion_001","type":"dialogue","speaker_control":{"active_speaker_only":true,"listener_mute":true},"camera":{"style":"close up","movement":"slow push in"},"audio":{"dialogue":"short emotional sentence"},"avoid":["two visible speaking mouths","speaker swap"]}
