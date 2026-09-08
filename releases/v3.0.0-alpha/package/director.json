@@ -1,0 +1,17 @@
+{
+  "version": "3.0.0-alpha",
+  "system": "MiniMax H3 Director OS",
+  "pipeline": [
+    "story_analysis",
+    "director_brain",
+    "shot_planning",
+    "prompt_compilation",
+    "quality_gate"
+  ],
+  "rules": {
+    "single_action_shot": true,
+    "camera_required": true,
+    "audio_supported": true,
+    "continuity_lock": true
+  }
+}
