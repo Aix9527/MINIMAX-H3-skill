@@ -1,0 +1,14 @@
+{
+  "id": "scene_drift",
+  "name": "Scene Continuity Failure",
+  "risk": "HIGH",
+  "trigger": [
+    "location changes inside one shot",
+    "missing scene anchor"
+  ],
+  "solution": [
+    "lock location",
+    "inherit previous scene memory",
+    "maintain lighting and objects"
+  ]
+}
