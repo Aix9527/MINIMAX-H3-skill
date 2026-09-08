@@ -1,0 +1,10 @@
+{
+  "project":"cinematic_drama_example",
+  "genre":"character_driven_drama",
+  "rules":{
+    "character_consistency":true,
+    "scene_continuity":true,
+    "single_action_per_shot":true
+  },
+  "workflow":"story_to_shot_to_prompt"
+}
