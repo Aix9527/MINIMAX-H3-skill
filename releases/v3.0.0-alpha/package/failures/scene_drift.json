@@ -1,0 +1,5 @@
+{
+  "failure": "scene_drift",
+  "description": "Scene changes unexpectedly between shots.",
+  "prevention": ["scene memory", "environment lock", "style consistency"]
+}
