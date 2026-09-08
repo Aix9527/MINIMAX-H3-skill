@@ -1,0 +1,5 @@
+{
+  "failure": "speaker_swap",
+  "description": "Dialogue appears from the wrong character.",
+  "prevention": ["single active speaker", "silent listener", "speaker ownership lock"]
+}
