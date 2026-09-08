@@ -1,8 +1,25 @@
 # MiniMax H3 Director OS v3.0.0-alpha
 
-Release package for MiniMax H3 video generation skill.
+## Release Package
 
-## Structure
+MiniMax H3 Director OS v3.0.0-alpha release package.
+
+Included:
+
+- SKILL.md
+- Director Brain
+- Story Analyzer
+- Shot Planner
+- Prompt Compiler
+- Quality Gate
+- Character Memory
+- Scene Continuity System
+- Case Library
+- Camera / Audio / Lighting Patterns
+- Failure Prevention Rules
+- Production Examples
+
+## Package Structure
 
 ```
 SKILL.md
@@ -16,4 +33,10 @@ examples/
 tests/
 ```
 
-This release focuses on cinematic planning, character consistency, scene continuity and structured H3 prompt generation.
+## Installation
+
+Import SKILL.md into your AI workflow.
+
+## Version
+
+v3.0.0-alpha
