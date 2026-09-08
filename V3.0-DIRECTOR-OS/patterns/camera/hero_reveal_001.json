@@ -1,0 +1,7 @@
+{
+  "id": "hero_reveal_001",
+  "type": "camera",
+  "purpose": "character introduction",
+  "movement": "low angle orbit",
+  "recommended_for": ["hero_entry", "power_reveal"]
+}
