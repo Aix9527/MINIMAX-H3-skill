@@ -1,5 +1,36 @@
 # 更新日志 / Changelog
 
+## v3.0.0 Final — 2026-09-08
+
+### Added / 新增
+
+- Director Engine（导演引擎）
+- Continuity Engine（连续性引擎）
+- Case Memory（案例记忆系统）
+- Prompt Planner（提示词规划器）
+- Prompt Scorer（提示词评分器）
+- Prompt Compiler（提示词编译器）
+- Quality Gate（质量门禁）
+- director.json v4 support（director.json v4 支持）
+
+### Preserved / 保留
+
+- V2.3 Core Doctrine
+- Shot Scope
+- Temporal Firewall
+- Reference Router
+- QC System
+
+### Philosophy / 定位
+
+V3.0 upgrades V2.3 from:
+
+Rule-based Director System
+to:
+Intelligent Director Operating System
+
+V3.0 将 V2.3 从"规则驱动导演系统"升级为"智能导演操作系统"，V2.3 Production Core 仍作为生产基础层完整保留。
+
 ## 2.3.0 — 2026-09-05
 
 ### 中文

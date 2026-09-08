@@ -1,0 +1,10 @@
+{
+  "id": "product_showcase_001",
+  "type": "commercial",
+  "camera": "macro push in",
+  "lighting": "studio reflection",
+  "audio": [
+    "material sound"
+  ],
+  "ending": "logo frame"
+}

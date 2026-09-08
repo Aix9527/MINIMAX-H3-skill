@@ -1,8 +1,37 @@
+# MiniMax H3 Director OS v3.0.0 Final
+
+AI Director Framework for MiniMax H3 Video Generation.
+
+## Upgrade
+
+Version 3.0 combines:
+
+### Production Core
+- V2.3 Cinematic Production Rules
+- Shot Scope Control
+- Temporal Firewall
+- Reference Router
+- QC System
+
+### Intelligence Layer
+- Director Engine
+- Continuity Engine
+- Case Memory
+- Prompt Planner
+- Prompt Scorer
+- Quality Gate
+
+---
+
 # MINIMAX-H3-skill
 
 ## 项目简介 / Overview
 
-**MiniMax H3 Director OS V2.3** 是一套面向 MiniMax H3 的生产级导演提示词生成 Skill。它把 H3 原生提示词契约、电影导演方法、数字真人、自然对白、说话者唯一归属、场景锁、人物状态、参考素材权限、长视频连续性与 QC 融合到同一套系统中。
+**MiniMax H3 Director OS V3.0** 是一套面向 MiniMax H3 的 AI 导演提示词系统。V3.0 在 V2.3 Production Core 之上叠加 Intelligence Layer，从"规则驱动导演"升级为"智能导演操作系统"，保留全部 V2.3 生产约束。
+
+**MiniMax H3 Director OS V3.0** is an AI director framework for MiniMax H3. V3.0 preserves the proven V2.3 Production Core and adds an Intelligence Layer for case-driven generation, prompt planning and quality validation.
+
+**V2.3 Production Core** 是一套面向 MiniMax H3 的生产级导演提示词生成 Skill。它把 H3 原生提示词契约、电影导演方法、数字真人、自然对白、说话者唯一归属、场景锁、人物状态、参考素材权限、长视频连续性与 QC 融合到同一套系统中。
 
 V2.3 的核心原则是：
 
@@ -279,6 +308,7 @@ Load [`SKILL.md`](./SKILL.md) from the repository root and describe the task nat
 
 所有正式版本都必须同时具备 **版本号 + Git Tag + GitHub Release**。
 
+- **v3.0.0 — MiniMax H3 Director OS V3.0.0 Final** — V2.3 Production Core + V3.0 Intelligence Layer
 - **v2.3.0 — MiniMax H3 Director OS V2.3** — SceneScope + Temporal Firewall + Reference Router + Dialogue Density Gate
 - **v2.2.0 — MiniMax H3 Director OS V2.2** — Speaker Ownership + Scene Lock
 - **v2.1.1 — MiniMax H3 Director OS V2.1.1** — H3 对白语法与中文语言锁修正
@@ -288,4 +318,4 @@ Load [`SKILL.md`](./SKILL.md) from the repository root and describe the task nat
 
 ## 当前版本 / Current Version
 
-**v2.3.0 — MiniMax H3 Director OS V2.3**
+**v3.0.0 — MiniMax H3 Director OS V3.0.0 Final**

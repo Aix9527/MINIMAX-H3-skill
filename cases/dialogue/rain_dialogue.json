@@ -1,0 +1,15 @@
+{
+  "id": "rain_dialogue_001",
+  "type": "cinematic_dialogue",
+  "camera": "slow push in",
+  "lighting": "cold blue rain mixed with warm practical light",
+  "audio": [
+    "rain",
+    "traffic",
+    "single dialogue"
+  ],
+  "ending": "hold on eyes",
+  "risk": [
+    "speaker swap"
+  ]
+}

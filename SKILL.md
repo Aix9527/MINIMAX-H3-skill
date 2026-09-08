@@ -1,10 +1,39 @@
 ---
 name: minimax-h3-director-os
-version: 2.3.0
+version: 3.0.0
 description: Use when creating, adapting, continuing, reviewing, or repairing MiniMax H3 video prompts from ideas, scripts, novels, shot lists, reference images/video/audio, accepted previous clips, dialogue scenes, recurring locations, action scenes, or schemaVersion 4 director.json workflows.
+release:
+  name: MiniMax H3 Director OS v3.0.0 Final
+architecture:
+  base:
+    - V2.3 Production Core
+  layers:
+    - V3.0 Intelligence Layer
 ---
 
-# MiniMax H3 Director OS V2.3.0
+# MiniMax H3 Director OS v3.0.0 Final
+
+> V3.0 is an evolutionary upgrade of V2.3 Production Core.
+
+## Architecture Update
+
+V3.0 preserves all V2.3 production rules and adds:
+
+- Director Engine
+- Continuity Engine
+- Case Memory
+- Prompt Planner
+- Prompt Scorer
+- Prompt Compiler
+- Quality Gate
+- director.json v4 extensions
+
+V2.3 remains the production foundation.
+V3.0 adds intelligence capabilities.
+
+---
+
+# V2.3 Production Core (base)
 
 A director-first, H3-native prompt compiler. Preserve the right information at the right layer so H3 receives a clear audiovisual job instead of a repeated production bible.
 
@@ -52,6 +81,23 @@ Load only what the task needs:
 - Established `.director.json` workflow → [Director JSON v4](references/director-json-v4.md)
 
 Do not load every module merely to make the prompt look sophisticated.
+
+## V3.0 Intelligence Layer Load Map
+
+When advanced generation is required:
+
+Load:
+
+- `core/director_engine.md` → story analysis, character/scene bible, shot intent
+- `core/continuity_engine.md` → identity/costume/prop/location continuity tracking
+- `intelligence/case_memory.md` → successful H3 cinematic pattern retrieval
+- `intelligence/prompt_planner.md` → complex description → stable shot planning
+- `intelligence/prompt_scorer.md` → prompt readiness scoring
+- `compiler/prompt_compiler.md` → final prompt assembly formula
+- `validator/quality_gate.md` → pre-output quality checks
+- `cases/` → cinematic / dialogue / commercial case patterns
+- `schemas/director.schema.json` → schemaVersion 4 extension
+- `examples/` → worked prompt examples
 
 ## Operating workflow
 
