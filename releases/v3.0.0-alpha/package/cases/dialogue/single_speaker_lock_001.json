@@ -1,0 +1,9 @@
+{
+  "case_name": "single_speaker_lock_001",
+  "category": "dialogue",
+  "rules": {
+    "active_speaker": "only one character",
+    "listener": "silent mouth movement",
+    "camera": "prefer close-up or over-shoulder"
+  }
+}
