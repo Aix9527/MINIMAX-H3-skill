@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MiniMax H3 Director review sidecar",
+  "type": "object",
+  "properties": {
+    "voices": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "speakerId",
+          "voiceAlias",
+          "language"
+        ],
+        "properties": {
+          "speakerId": {
+            "type": "string",
+            "pattern": "^S[1-9][0-9]*$"
+          },
+          "voiceAlias": {
+            "type": "string",
+            "minLength": 1
+          },
+          "language": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ageImpression": {
+            "type": "string"
+          },
+          "timbre": {
+            "type": "string"
+          },
+          "pace": {
+            "type": "string"
+          },
+          "accent": {
+            "type": "string"
+          },
+          "sharedVoiceReason": {
+            "type": "string"
+          },
+          "testClips": {
+            "type": "object",
+            "properties": {
+              "normal": {
+                "enum": [
+                  "NOT_TESTED",
+                  "PASS",
+                  "FAIL"
+                ]
+              },
+              "excited": {
+                "enum": [
+                  "NOT_TESTED",
+                  "PASS",
+                  "FAIL"
+                ]
+              },
+              "whisper": {
+                "enum": [
+                  "NOT_TESTED",
+                  "PASS",
+                  "FAIL"
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "shots": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "sceneId": {
+            "type": "string"
+          },
+          "requiredAliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "activeSpeakerIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "visibleCharacterIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "visualMode": {
+            "enum": [
+              "reality",
+              "memory",
+              "imagination",
+              "dream"
+            ]
+          },
+          "viewpointCharacterId": {
+            "type": "string"
+          },
+          "speechSeconds": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "dialogueLines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "lineId",
+                "characterId",
+                "delivery",
+                "language",
+                "text"
+              ],
+              "properties": {
+                "lineId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "characterId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "voiceSourceCharacterId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "delivery": {
+                  "enum": [
+                    "onscreen",
+                    "offscreen",
+                    "inner",
+                    "narration",
+                    "dream_speech"
+                  ]
+                },
+                "language": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

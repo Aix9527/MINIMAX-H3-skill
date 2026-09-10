@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 4,
+  "project": {
+    "id": "h3_example",
+    "name": "规范示例",
+    "runId": "1"
+  },
+  "defaults": {
+    "fps": 24,
+    "baseSeed": 123
+  },
+  "assets": [],
+  "shots": [
+    {
+      "id": "shot_001",
+      "prompt": "integrated_multimodal_description: [Shot 1] A woman sits beside a window in soft neutral light. Locked medium close-up. She takes a quiet breath. The woman (S1) says: <d>[Chinese]你来了。</d> Her lips settle and her gaze stays on the doorway.\n\noverall_soundscape: Quiet room tone.\n\nnon_diegetic_music: N/A",
+      "durationSeconds": 6,
+      "enabled": true,
+      "latentRelay": false,
+      "secondSampling": false
+    }
+  ]
+}

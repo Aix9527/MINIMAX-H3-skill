@@ -46,32 +46,23 @@ jobs:
       - name: Validate required contracts / 校验必要契约
         shell: bash
         run: |
-          VERSION="$(awk '/^version:/ {gsub(/"/, "", $2); print $2; exit}' SKILL.md)"
+          VERSION="$(awk '/^[[:space:]]*version:/ {gsub(/"/, "", $2); print $2; exit}' SKILL.md)"
           if [ -z "$VERSION" ]; then
             echo "Missing SKILL.md version / SKILL.md 缺少版本号"
             exit 1
           fi
 
-          grep -q 'SUBTLE_LIPSYNC' SKILL.md
-          grep -q 'SUBTLE_LIPSYNC' references/audio-identity.md
-          grep -q 'SUBTLE_LIPSYNC' references/dialogue-motion.md
-          grep -q 'CLOSED_LIPS' references/audio-identity.md
-          grep -q 'CLOSED_LIPS' references/dialogue-motion.md
-
-          # V2.3 semantic-scope contracts.
-          test -f references/shot-scope-compiler.md
-          test -f references/reference-router.md
-          grep -q 'The Director may know the whole story. H3 may see only the current shot.' SKILL.md
-          grep -q 'ACTIVE_SHOT_SCOPE' SKILL.md
-          grep -q 'Temporal firewall' SKILL.md
-          grep -q 'DIALOGUE_DENSITY_OVERLOAD' SKILL.md
-          grep -q 'SCOPE_LEAK' references/shot-scope-compiler.md
-          grep -q 'FUTURE_BEAT_LEAK' references/shot-scope-compiler.md
-          grep -q 'REFERENCE_OWNER_MISMATCH' references/reference-router.md
-          grep -q 'speech_density' references/dialogue-motion.md
-          grep -q 'complete Scene Bible is Director/compiler knowledge only' references/speaker-scene-lock.md
-          grep -q 'Preflight before JSON emission' references/director-json-v4.md
           grep -q "v${VERSION}" README.md
+          python3 -m unittest discover -s tests -v
+          python3 -m compileall -q scripts tests
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          for folder in ('schemas', 'examples'):
+              for path in Path(folder).glob('*.json'):
+                  json.loads(path.read_text(encoding='utf-8'))
+          print('JSON examples and schemas parse successfully')
+          PY
 
           echo "Skill contract passed for v${VERSION} / v${VERSION} Skill 契约检查通过"
 
@@ -93,7 +84,7 @@ jobs:
       - name: Create version tag and release if missing / 缺失时创建版本标签与发布
         shell: bash
         run: |
-          VERSION="$(awk '/^version:/ {gsub(/"/, "", $2); print $2; exit}' SKILL.md)"
+          VERSION="$(awk '/^[[:space:]]*version:/ {gsub(/"/, "", $2); print $2; exit}' SKILL.md)"
           TAG="v${VERSION}"
 
           git config user.name "github-actions[bot]"

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 4,
+  "project": {
+    "id": "reference_example",
+    "name": "角色加画风示例",
+    "runId": "1"
+  },
+  "defaults": {
+    "fps": 24,
+    "baseSeed": 88886666
+  },
+  "promptPrefix": "",
+  "promptSuffix": "",
+  "continuity": {
+    "mode": "h3_av_latent",
+    "videoContextFrames": 22,
+    "audioContextFrames": 24,
+    "durationMode": "final_output",
+    "note": "Shot 1 of each segment restates full character anchors because H3 sees only current-shot context. Reference images (assets) lock faces/costumes/props. Screen-text barrage appears as diegetic on-phone/stream graphics."
+  },
+  "assets": [
+    {
+      "id": "style_reference",
+      "alias": "STYLE",
+      "kind": "image",
+      "path": "REPLACE_WITH_REAL_FILE/STYLE.png",
+      "enabled": true,
+      "fixed": false,
+      "shotIds": []
+    },
+    {
+      "id": "asset_0eabd43737ec5934",
+      "alias": "陈不凡_04_面部近景",
+      "kind": "image",
+      "path": "REPLACE_WITH_REAL_FILE/陈不凡_04_面部近景.png",
+      "enabled": true,
+      "fixed": false,
+      "fixedOrder": 21,
+      "shotIds": [],
+      "includeVideoAudio": false,
+      "durationSeconds": null,
+      "audioDurationSeconds": null,
+      "fingerprint": "64eaee3fc38ecf9884918a1c4beaaf7e0bf8a100c712661c28d0f94bd1f19e53"
+    }
+  ],
+  "shots": [
+    {
+      "id": "shot_001",
+      "title": "十七人在线",
+      "prompt": "subject_definitions: <Subject 1> is the rendering style visible in {{ref:STYLE}}: semi-realistic sculpted animated faces with realistic environments and soft light.\n<Subject 2> is 陈不凡 in {{ref:陈不凡_04_面部近景}}. Use this image for this character’s facial identity, hairline and eye shape only. Keep the new shot’s pose, location and lighting. Props and portrait framing are not copied.\n\nsummary: [reference generation] Create one continuous shot for an urban supernatural suspense story. Transfer rendering treatment only to new original characters.\n\nretention_analysis: <Subject 1>: attribute_transfer - transfer facial rendering, material response and lighting softness only. The reference person, hairstyle, clothing, classroom, text and composition are not target content.\n<Subject 2>: partially_preserved - preserve facial identity and hair; animate the specified performance and render it with Subject 1’s naturalistic 3D treatment.\n\ndetailed_description: Semi-realistic 3D animated Chinese suspense drama: natural-size expressive eyes with restrained animation stylization, sculpted yet natural facial planes, believable adult proportions, soft skin subsurface scattering, fine separated hair strands, realistic woven cloth and wood. Soft motivated key light, gentle fill and contact shadows, neutral skin tones, restrained color, readable midtones, controlled highlights. Faces are the visual priority; detailed three-dimensional rooms recede gently behind them.\n[Shot 1] The visible lead is <Subject 2>. A small contemporary streaming room at night. Dark wood desk, bronze coin, brush and worn notebook. A large soft warm desk-lamp key models the face; restrained cool monitor fill comes from camera right. The wall and shelves remain visible in soft shadow. CHEN BUFAN is a lean Chinese man aged 28, narrow oval face, straight brows, naturally proportioned expressive eyes matching the identity reference, short layered black hair, faded charcoal crew-neck T-shirt. His movements are economical and his voice is low, clear Mandarin. Eye-level medium close-up, 50mm perspective. CHEN rests two fingers on the bronze coin. He looks directly at the camera, speaking calmly. The camera inches forward by five percent and settles on his eyes. CHEN BUFAN (S1) says: <d>[Chinese]今日三卦，善缘半价，恶人翻倍。</d> Maintain stable facial anatomy and object geometry throughout. Motion is restrained and physically coherent. Leave the image clean for later subtitles and interface graphics; no generated lettering, floating comments or split screen.\n\noverall_soundscape: Low natural room tone, small physical contact sounds appropriate to the visible action. Clear foreground speech when specified, no crowd chatter.\n\nnon_diegetic_music: N/A",
+      "negativePrompt": "",
+      "durationSeconds": 6,
+      "enabled": true,
+      "seed": 88886666,
+      "disabledAssetIds": [],
+      "latentRelay": false,
+      "secondSampling": true,
+      "secondSamplingMode": "latent_upscale_second_pass"
+    }
+  ]
+}

@@ -133,6 +133,20 @@ Reference labels keep one meaning across every section.
 
 `retention_analysis` must state what transfers, what changes, and what must not transfer.
 
+
+## Ref2VA public input limits
+
+For the current public MiniMax H3 Ref2VA baseline:
+
+- images: at most 9;
+- videos: at most 3, each 2–15 seconds, total video duration at most 15 seconds;
+- standalone audio clips: at most 3, each 2–15 seconds, total audio duration at most 15 seconds;
+- mixed reference files: at most 12 total;
+- a standalone audio reference cannot be the only input; at least one image or video must accompany it;
+- reference order is semantic, so `<Picture N>`, `<Video N>`, and `<Audio N>` must follow the actual request order.
+
+These are model-input constraints. A Theodore/ComfyUI adapter may impose additional restrictions; inspect the installed runtime instead of inventing fixed node-version requirements.
+
 ## Language of rewrite prose
 
 For workflows based on the official prompt-writing guide, write rewrite sections in English while preserving dialogue, lyrics and exact visible scene text in their original language. If a proven runtime explicitly requires Chinese production prose, follow that runtime without changing official field names or canonical dialogue grammar.

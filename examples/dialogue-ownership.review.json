@@ -1,0 +1,89 @@
+{
+  "voices": {
+    "CHEN": {
+      "speakerId": "S1",
+      "voiceAlias": "CHEN_VOICE",
+      "language": "Chinese"
+    },
+    "SHEN": {
+      "speakerId": "S2",
+      "voiceAlias": "SHEN_VOICE",
+      "language": "Chinese"
+    }
+  },
+  "shots": {
+    "shot_001": {
+      "sceneId": "SCENE_1",
+      "requiredAliases": [
+        "CHEN_FACE",
+        "CHEN_VOICE"
+      ],
+      "activeSpeakerIds": [
+        "CHEN"
+      ],
+      "visibleCharacterIds": [
+        "CHEN"
+      ],
+      "visualMode": "reality",
+      "viewpointCharacterId": "CHEN",
+      "dialogueLines": [
+        {
+          "lineId": "line_1",
+          "characterId": "CHEN",
+          "delivery": "onscreen",
+          "language": "Chinese",
+          "text": "别开门。",
+          "voiceSourceCharacterId": "CHEN"
+        }
+      ]
+    },
+    "shot_002": {
+      "sceneId": "SCENE_2",
+      "requiredAliases": [
+        "CHEN_FACE",
+        "CHEN_VOICE"
+      ],
+      "activeSpeakerIds": [
+        "CHEN"
+      ],
+      "visibleCharacterIds": [],
+      "visualMode": "imagination",
+      "viewpointCharacterId": "CHEN",
+      "dialogueLines": [
+        {
+          "lineId": "line_2",
+          "characterId": "CHEN",
+          "delivery": "inner",
+          "language": "Chinese",
+          "text": "这件事不对劲。",
+          "voiceSourceCharacterId": "CHEN"
+        }
+      ]
+    },
+    "shot_003": {
+      "sceneId": "SCENE_3",
+      "requiredAliases": [
+        "SHEN_FACE",
+        "SHEN_VOICE"
+      ],
+      "activeSpeakerIds": [
+        "SHEN"
+      ],
+      "visibleCharacterIds": [
+        "SHEN"
+      ],
+      "visualMode": "dream",
+      "viewpointCharacterId": "CHEN",
+      "dialogueLines": [
+        {
+          "lineId": "line_3",
+          "characterId": "SHEN",
+          "delivery": "dream_speech",
+          "language": "Chinese",
+          "text": "陈先生，你听见了吗？",
+          "voiceSourceCharacterId": "SHEN"
+        }
+      ]
+    }
+  }
+}

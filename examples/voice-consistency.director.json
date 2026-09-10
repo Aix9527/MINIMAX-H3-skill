@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 4,
+  "project": {
+    "id": "voice_reference_template",
+    "name": "王翠花声音模板",
+    "runId": "1"
+  },
+  "defaults": {
+    "fps": 24,
+    "baseSeed": 123
+  },
+  "assets": [
+    {
+      "id": "face",
+      "alias": "WANG_FACE",
+      "kind": "image",
+      "path": "REPLACE_WITH_REAL_FILE/wang_face.png",
+      "enabled": true
+    },
+    {
+      "id": "voice",
+      "alias": "WANG_VOICE",
+      "kind": "audio",
+      "path": "REPLACE_WITH_REAL_FILE/wang_voice.wav",
+      "durationSeconds": 6,
+      "enabled": true
+    }
+  ],
+  "shots": [
+    {
+      "id": "shot_001",
+      "durationSeconds": 6,
+      "enabled": true,
+      "latentRelay": false,
+      "prompt": "subject_definitions: <Subject 1> is WANG CUIHUA in {{ref:WANG_FACE}}. {{ref:WANG_VOICE}} is the voice-timbre reference for <Subject 1> (S1).\n\nsummary: [reference generation + audio reference] WANG reassures her granddaughter offscreen.\n\nretention_analysis: <Subject 1>: fully_preserved - facial identity and current clothes. {{ref:WANG_VOICE}}: reference - preserve mature Mandarin vocal timbre and accent, not the source recording words.\n\ndetailed_description: Natural live-action lighting. [Shot 1] Locked medium close-up on WANG (S1), the only person visible. Her voice is mature, slightly husky and firm; she speaks gently without changing vocal identity. WANG (S1) says: <d>[Chinese]别怕，奶奶在。</d> Her lips settle during the pause; her eyes soften.\n\noverall_soundscape: Quiet room tone, speech clearly foregrounded.\n\nnon_diegetic_music: N/A"
+    }
+  ]
+}

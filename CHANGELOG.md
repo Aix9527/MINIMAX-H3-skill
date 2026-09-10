@@ -1,4 +1,33 @@
-# 更新日志 / Changelog
+# CHANGELOG
+
+## 4.0.0 — 2026-09-11
+
+### Added
+- `SKILL.md` quick reference, source precedence, terminology, P0/P1/P2 reading tiers, explicit deliverable contract, compatibility section and consolidated anti-patterns.
+- `references/compatibility.md` with verified MiniMax H3 public input limits and runtime-first Theodore compatibility policy.
+- `schemas/review.schema.json` documenting voice profiles, viewpoint metadata, dialogue ledgers, `voiceSourceCharacterId` and `dream_speech`.
+- Ref2VA preflight checks for image/video/audio/file-count limits, audio-only invalid reference requests, individual media duration and total reference duration.
+- Dialogue validation support for separate semantic owner vs actual voice source.
+- Dialogue validation support for `dream_speech`.
+
+### Changed
+- Expanded `voice-consistency.md` into an operational cross-shot voice identity contract.
+- Expanded `dialogue-ownership.md` into a five-way separation of owner, voice source, visible character, viewpoint and mouth behavior.
+- Added Ref2VA public limits to `h3-native-output.md`.
+- Added new preflight error codes to `qc-repair.md`.
+- Updated bundled review examples to demonstrate v4 fields.
+
+### Compatibility policy
+- Removed unverified hard-coded minimum versions for ComfyUI/Theodore/custom nodes.
+- Actual installed Theodore parser and real runtime inputs remain authoritative.
+- MiniMax H3 public prompt/input constraints were checked against the official upstream documentation on 2026-09-11.
+
+### Verification
+- 37 unit tests pass.
+- Python scripts compile successfully.
+- Markdown local-link check passes.
+- JSON examples/schemas parse successfully.
+- No GPU inference, audio listening, lip-sync inspection or local Theodore runtime execution was performed in this packaging environment.
 
 ## v3.0.0 Final — 2026-09-08
 

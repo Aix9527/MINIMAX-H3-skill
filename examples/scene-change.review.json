@@ -1,0 +1,10 @@
+{
+  "shots": {
+    "shot_001": {
+      "sceneId": "ROOM_A"
+    },
+    "shot_002": {
+      "sceneId": "ROOM_B"
+    }
+  }
+}

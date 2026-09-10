@@ -1,0 +1,5 @@
+integrated_multimodal_description: [Shot 1] Locked over-shoulder shot of a woman facing a closed door, her mouth outside the frame. A man behind the door (S2) says: <d>[Chinese]是我，开门。</d> Her fingers tighten on the phone.
+
+overall_soundscape: A soft knock followed by quiet room tone.
+
+non_diegetic_music: N/A

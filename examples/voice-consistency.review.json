@@ -1,0 +1,30 @@
+{
+  "voices": {
+    "WANG": {
+      "speakerId": "S1",
+      "voiceAlias": "WANG_VOICE",
+      "language": "Chinese",
+      "ageImpression": "elderly woman",
+      "timbre": "slightly husky, firm",
+      "pace": "brisk but clear",
+      "testClips": {
+        "normal": "NOT_TESTED",
+        "excited": "NOT_TESTED",
+        "whisper": "NOT_TESTED"
+      }
+    }
+  },
+  "shots": {
+    "shot_001": {
+      "sceneId": "HOME",
+      "requiredAliases": [
+        "WANG_FACE",
+        "WANG_VOICE"
+      ],
+      "activeSpeakerIds": [
+        "WANG"
+      ],
+      "speechSeconds": 4
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 4,
+  "project": {
+    "id": "dialogue_ownership_template",
+    "name": "陈不凡台词归属模板",
+    "runId": "1"
+  },
+  "defaults": {
+    "fps": 24,
+    "baseSeed": 123
+  },
+  "assets": [
+    {
+      "id": "chen_image",
+      "alias": "CHEN_FACE",
+      "kind": "image",
+      "path": "REPLACE_WITH_REAL_FILE/chen.png",
+      "enabled": true
+    },
+    {
+      "id": "chen_audio",
+      "alias": "CHEN_VOICE",
+      "kind": "audio",
+      "path": "REPLACE_WITH_REAL_FILE/chen.wav",
+      "enabled": true,
+      "durationSeconds": 5
+    },
+    {
+      "id": "shen_image",
+      "alias": "SHEN_FACE",
+      "kind": "image",
+      "path": "REPLACE_WITH_REAL_FILE/shen.png",
+      "enabled": true
+    },
+    {
+      "id": "shen_audio",
+      "alias": "SHEN_VOICE",
+      "kind": "audio",
+      "path": "REPLACE_WITH_REAL_FILE/shen.wav",
+      "enabled": true,
+      "durationSeconds": 5
+    }
+  ],
+  "shots": [
+    {
+      "id": "shot_001",
+      "prompt": "subject_definitions: <Subject 1> is CHEN BUFAN in {{ref:CHEN_FACE}}. {{ref:CHEN_VOICE}} is the voice reference for <Subject 1> (S1).\n\nsummary: [reference generation + audio reference] reality scene; speech belongs to CHEN BUFAN.\n\nretention_analysis: <Subject 1>: partially_preserved - preserve identity when visible. {{ref:CHEN_VOICE}}: reference - preserve voice identity and accent, not source words.\n\ndetailed_description: Naturalistic lighting and restrained motion. [Shot 1] CHEN stands at his desk, looking toward the door. CHEN BUFAN (S1) says: <d>[Chinese]别开门。</d> Only the named speaker articulates this line; other characters remain silent.\n\noverall_soundscape: Quiet room tone.\n\nnon_diegetic_music: N/A",
+      "durationSeconds": 6,
+      "enabled": true,
+      "latentRelay": false
+    },
+    {
+      "id": "shot_002",
+      "prompt": "subject_definitions: <Subject 1> is CHEN BUFAN in {{ref:CHEN_FACE}}. {{ref:CHEN_VOICE}} is the voice reference for <Subject 1> (S1).\n\nsummary: [reference generation + audio reference] imagination scene; speech belongs to CHEN BUFAN.\n\nretention_analysis: <Subject 1>: partially_preserved - preserve identity when visible. {{ref:CHEN_VOICE}}: reference - preserve voice identity and accent, not source words.\n\ndetailed_description: Naturalistic lighting and restrained motion. [Shot 1] A silent imagined hallway appears; no person is visible. CHEN BUFAN (S1) says in an off-screen voiceover: <d>[Chinese]这件事不对劲。</d> This is his unspoken thought; no visible character articulates it.\n\noverall_soundscape: Quiet room tone.\n\nnon_diegetic_music: N/A",
+      "durationSeconds": 6,
+      "enabled": true,
+      "latentRelay": false
+    },
+    {
+      "id": "shot_003",
+      "prompt": "subject_definitions: <Subject 1> is SHEN QINGYUE in {{ref:SHEN_FACE}}. {{ref:SHEN_VOICE}} is the voice reference for <Subject 1> (S2).\n\nsummary: [reference generation + audio reference] dream scene; speech belongs to SHEN QINGYUE.\n\nretention_analysis: <Subject 1>: partially_preserved - preserve identity when visible. {{ref:SHEN_VOICE}}: reference - preserve voice identity and accent, not source words.\n\ndetailed_description: Naturalistic lighting and restrained motion. [Shot 1] In CHEN’s dream, SHEN stands by a window and speaks toward him offscreen. SHEN QINGYUE (S2) says: <d>[Chinese]陈先生，你听见了吗？</d> Only the named speaker articulates this line; other characters remain silent.\n\noverall_soundscape: Quiet room tone.\n\nnon_diegetic_music: N/A",
+      "durationSeconds": 6,
+      "enabled": true,
+      "latentRelay": false
+    }
+  ]
+}

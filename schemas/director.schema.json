@@ -1,9 +1,96 @@
 {
-  "schemaVersion": 4,
-  "directorAI": {
-    "caseMemory": [],
-    "score": {},
-    "risk": {},
-    "planning": {}
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Director basic container (runtime parser remains authoritative)",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "project",
+    "assets",
+    "shots"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "enum": [
+        4,
+        5
+      ]
+    },
+    "project": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "alias",
+          "kind",
+          "path"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "alias": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "image",
+              "video",
+              "audio"
+            ]
+          }
+        }
+      }
+    },
+    "shots": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "prompt",
+          "durationSeconds"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1
+          },
+          "durationSeconds": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "latentRelay": {
+            "type": "boolean"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
   }
 }
